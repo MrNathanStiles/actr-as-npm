@@ -1,3 +1,3 @@
 npm publish --access public
 
-npm -i 
+npm -i @actr-wasm/as
