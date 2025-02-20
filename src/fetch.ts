@@ -21,8 +21,6 @@ export function actr_fetch_text(url: string, mapId: i32, name: string): i32 {
 // calls actr_async_result with the returned handle and success indicator  
 // returns the handle of the asynchronous operation
 
-// @ts-ignore
-@external("env", "actr_fetch_json")
 export function actr_fetch_json(url: string, jsonId: i32): i32 {
     return _actr_fetch_json_length(url, url.length, jsonId);
 }
