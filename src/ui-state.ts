@@ -1,8 +1,9 @@
 
-import { ActrSize32 } from ".";
+
 import { actr_canvas2d_fill_rect, actr_canvas2d_fill_style } from "./canvas";
 import { actr_log } from "./log";
 import { ActrQuadTree, ActrQuadTreeBounds, ActrQuadTreeLeaf } from "./quad-tree";
+import { ActrSize32 } from "./size";
 import { ActrUIControl, ActrUIType } from "./ui-control";
 import { ActrUIControlButton } from "./ui-control-button";
 import { ActrUIControlContainer } from "./ui-control-container";
