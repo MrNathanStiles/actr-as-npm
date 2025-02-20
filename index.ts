@@ -22,6 +22,6 @@ export * from './src/ui-state';
 @external("env", "_actr_sanity")
 export declare function _actr_sanity(encoding: i32): void;
 
-export function _actr_construct(): void {
+export function actr_construct(): void {
     _actr_sanity(UTF16);
 }

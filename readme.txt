@@ -1,3 +1,1 @@
-npm publish --access public
-
-npm -i @actr-wasm/as
+npm install --save @actr-wasm/as@latest
