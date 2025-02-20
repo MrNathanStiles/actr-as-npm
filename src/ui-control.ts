@@ -1,6 +1,6 @@
-import { ActrPoint32, ActrPoint64 } from ".";
 import { actr_canvas2d_fill_rect, actr_canvas2d_fill_style_int, actr_canvas2d_stroke_rect, actr_canvas2d_stroke_style_int } from "./canvas";
 import { actr_log } from "./log";
+import { ActrPoint64 } from "./point";
 import { ActrQuadTreeLeaf } from "./quad-tree";
 import { ActrUIControlContainer } from "./ui-control-container";
 import { actr_pack_bytes, actr_unpack_bytes, ActrUIState } from "./ui-state";

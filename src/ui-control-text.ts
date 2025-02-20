@@ -1,4 +1,4 @@
-import { actr_canvas2d_begin_path, actr_canvas2d_fill_style_int, actr_canvas2d_fill_text, actr_canvas2d_lineto, actr_canvas2d_moveto, actr_canvas2d_stroke, actr_canvas2d_stroke_rect, actr_canvas2d_stroke_style_int } from "./canvas";
+import { actr_canvas2d_begin_path, actr_canvas2d_fill_style_int, actr_canvas2d_fill_text, actr_canvas2d_lineto, actr_canvas2d_moveto, actr_canvas2d_stroke, actr_canvas2d_stroke_style_int } from "./canvas";
 import { ActrUIControl, ActrUIType } from "./ui-control";
 import { ActrUIKeyCode, ActrUIState } from "./ui-state";
 
