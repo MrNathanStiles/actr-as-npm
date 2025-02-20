@@ -153,7 +153,7 @@ export class ActrUIControlText extends ActrUIControl {
                     newValue += this._label.at(i - 1);
                 }
             }
-            this._label = newValue;
+        this._label = newValue;
             this.cursor++;
         }
     }

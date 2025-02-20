@@ -47,11 +47,11 @@ export class ActrUIState {
 
     public addButton(x: i32, y: i32, w: i32, h: i32, label: string): ActrUIControlButton {
         const button = new ActrUIControlButton(this, x, y, w, h, label);
-        const leaf=button.leaf; 
+        const leaf = button.leaf;
         if (leaf != null) {
             this.tree.insert(leaf);
         }
-         return button;
+        return button;
     }
     public setFocused(control: ActrUIControl): void {
         if (this.focused === control) return;
@@ -123,10 +123,15 @@ export class ActrUIState {
     }
 
     private query(x: i32, y: i32, w: i32, h: i32): ActrQuadTreeLeaf<ActrUIControl>[] {
-        const area = new ActrQuadTreeBounds(x,y,w,h);
+        const area = new ActrQuadTreeBounds(x, y, w, h);
         const results = this.tree.query(area)
         // actr_merge_sort_mutate(actr_ui_state->results, 0, actr_ui_state->results->count - 1, _actr_ui_query_sort_comparator, 0);
         return results;
+    }
+    public actr_ui_resize(w: i32, h: i32): void {
+        this.canvasSize.w = w;
+        this.canvasSize.h = h;
+        this.invalidate();
     }
 
     public actr_ui_move(x: i32, y: i32): ActrUIControl | null {
@@ -173,17 +178,17 @@ export class ActrUIState {
             }
         }
         this._actr_ui_set_focus(target);
-        
+
         return target;
     }
 
-    
+
     public draw(): void {
 
         if (this.valid) {
             return;
         }
-        
+
         this.valid = true;
         // clear canvas
         actr_canvas2d_fill_style(0, 0, 0, 100);

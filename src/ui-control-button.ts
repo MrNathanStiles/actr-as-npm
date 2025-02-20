@@ -4,12 +4,13 @@ import { ActrUIState } from "./ui-state";
 
 export class ActrUIControlButton extends ActrUIControl {
 
+    private _label: string;
     public get label(): string {
         return this._label;
     }
 
     public set label(value: string) {
-        if (this._label !== value) return;
+        if (this._label == value) return;
         this.uiState.invalidate();
         this._label = value;
     }
@@ -17,9 +18,10 @@ export class ActrUIControlButton extends ActrUIControl {
     public constructor(
         uiState: ActrUIState,
         x: i32, y: i32, w: i32, h: i32,
-        private _label: string
+        label: string
     ) {
         super(uiState, ActrUIType.Button, x, y, w, h);
+        this._label = label;
     }
 
     public draw(): void {
@@ -40,11 +42,11 @@ export class ActrUIControlButton extends ActrUIControl {
         const charWidth = 9;
         const padSide = 6;
         const maxChars = ((i32)(size.w) - padSide * 2) / charWidth;
-        const charCount = this.label.length;
+        const charCount = this._label.length;
 
         const textLift = 8;
         if (charCount > maxChars) {
-            const label = this.label.substring(0, maxChars);
+            const label = this._label.substring(0, maxChars);
             actr_canvas2d_fill_text((f32)(position.x + padSide), (f32)(position.y + size.h - textLift), label);
         }
         else {
