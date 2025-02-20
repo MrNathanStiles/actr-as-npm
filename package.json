@@ -1,0 +1,38 @@
+{
+  "name": "@actr-wasm/as",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.ts",
+  "type": "module",
+  "license": "",
+  "private": false,
+  "engines": {
+    "node": ">= 14.0.0",
+    "npm": ">= 6.0.0"
+  },
+  "homepage": "https://www.d1ag0n.com/",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "bugs": "",
+  "keywords": [
+    "wasm",
+    "assembly script",
+    "actr"
+  ],
+  "author": {
+    "name": "Nathan Stiles",
+    "email": "stiles.nathan@outlook.com",
+    "url": "https://discord.gg/vDE8EnttaZ"
+  },
+  "contributors": [],
+  "scripts": {
+    "dev": "",
+    "test": ""
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "assemblyscript": "^0.27.34"
+  }
+}
