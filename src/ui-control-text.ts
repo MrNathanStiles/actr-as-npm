@@ -3,26 +3,26 @@ import { ActrUIControl, ActrUIType } from "./ui-control";
 import { ActrUIKeyCode, ActrUIState } from "./ui-state";
 
 export class ActrUIControlText extends ActrUIControl {
-    public value: string = '';
     public cursor: i32 = 0;
 
-
+    private _label: string;
     public get label(): string {
-        return this._text;
+        return this._label;
     }
 
     public set label(value: string) {
-        if (this._text !== value) return;
+        if (this._label !== value) return;
         this.uiState.invalidate();
-        this._text = value;
+        this._label = value;
     }
     public constructor(
 
         uiState: ActrUIState,
         x: i32, y: i32, w: i32, h: i32,
-        private _text: string
+        label: string
     ) {
         super(uiState, ActrUIType.Text, x, y, w, h);
+        this._label = label;
     }
 
     public draw(): void {
@@ -40,7 +40,7 @@ export class ActrUIControlText extends ActrUIControl {
         const padSide = 5;
         const maxChars = ((i32)(size.w) - padSide * 2) / charWidth;
         const halfChars = maxChars / 2;
-        const charCount = this.value.length;
+        const charCount = this._label.length;
         let substart = this.cursor - halfChars;
 
         if (focused) actr_canvas2d_fill_style_int(this.foregroundColorFocused);
@@ -54,13 +54,13 @@ export class ActrUIControlText extends ActrUIControl {
             if (substart + maxChars > charCount) {
                 substart -= substart + maxChars - charCount;
             }
-            const display = this.value.substring(substart, maxChars);
+            const display = this._label.substring(substart, maxChars);
             actr_canvas2d_fill_text((f32)(position.x + padSide), (f32)(position.y + size.h - 5), display);
             
         }
         else {
             substart = 0;
-            actr_canvas2d_fill_text((f32)(position.x + padSide), (f32)(position.y + size.h - 5), this.value);
+            actr_canvas2d_fill_text((f32)(position.x + padSide), (f32)(position.y + size.h - 5), this._label);
         }
 
         this.drawBorder(position, focused, hovered);
@@ -78,7 +78,7 @@ export class ActrUIControlText extends ActrUIControl {
     _actr_ui_key_down_text(key: ActrUIKeyCode): void {
         let newLength: i32;
         let newValue: string;
-        let currentLength = this.value.length;
+        let currentLength = this._label.length;
         switch (key) {
             case ActrUIKeyCode.ArrowLeft:
                 // left arrow
@@ -108,13 +108,13 @@ export class ActrUIControlText extends ActrUIControl {
                 newValue = '';
                 for (let i: i32 = 0; i < newLength; i++) {
                     if (i < this.cursor - 1) {
-                        newValue += this.value.at(i);
+                        newValue += this._label.at(i);
                     }
                     else {
-                        newValue += this.value.at(i + 1);
+                        newValue += this._label.at(i + 1);
                     }
                 }
-                this.value = newValue;
+                this._label = newValue;
                 this.cursor--;
                 return;
 
@@ -128,13 +128,13 @@ export class ActrUIControlText extends ActrUIControl {
                 newValue = '';
                 for (let i: i32 = 0; i < newLength; i++) {
                     if (i <= this.cursor - 1) {
-                        newValue += this.value.at(i);
+                        newValue += this._label.at(i);
                     }
                     else {
-                        newValue += this.value.at(i + 1);
+                        newValue += this._label.at(i + 1);
                     }
                 }
-                this.value = newValue;
+                this._label = newValue;
                 return;
         }
         if (key >= 32 && key <= 126) {
@@ -144,16 +144,16 @@ export class ActrUIControlText extends ActrUIControl {
             for (let i: i32 = 0; i < newLength; i++) {
 
                 if (i < this.cursor) {
-                    newValue += this.value.at(i);
+                    newValue += this._label.at(i);
                 }
                 else if (i == this.cursor) {
                     newValue += key;
                 }
                 else {
-                    newValue += this.value.at(i - 1);
+                    newValue += this._label.at(i - 1);
                 }
             }
-            this.value = newValue;
+            this._label = newValue;
             this.cursor++;
         }
     }

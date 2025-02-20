@@ -155,7 +155,7 @@ export class ActrUIState {
 
         if (control && control.type === ActrUIType.Text) {
             const text = control as ActrUIControlText;
-            text.cursor = text.value.length;
+            text.cursor = text.label.length;
         }
         this.invalidate();
     }
