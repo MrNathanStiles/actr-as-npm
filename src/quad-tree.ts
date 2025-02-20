@@ -1,5 +1,6 @@
-import { ActrPoint64, ActrPointD, ActrSize64 } from ".";
 import { actr_log } from "./log";
+import { ActrPoint64, ActrPointD } from "./point";
+import { ActrSize64 } from "./size";
 
 const LIST_MAX: i32 = 2;
 
