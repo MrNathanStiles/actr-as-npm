@@ -38,10 +38,10 @@ export function actr_json_set_int(jsonId: i32, path: string, value: i64): void {
     _actr_json_set_int_length(jsonId, path, path.length, value);
 }
 
-export function actr_json_set_float(jsonId: i32, path: string, value: f64) {
+export function actr_json_set_float(jsonId: i32, path: string, value: f64): void {
     _actr_json_set_float_length(jsonId, path, path.length, value);
 }
-export function actr_json_set_string(jsonId: i32, path: string, value: string) {
+export function actr_json_set_string(jsonId: i32, path: string, value: string): void {
     _actr_json_set_string_length(jsonId, path, path.length, value, value.length);
 }
 
