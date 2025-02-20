@@ -27,7 +27,7 @@ export class ActrQuadTreeBounds {
             RectA.Top > RectB.Bottom &&
             RectA.Bottom < RectB.Top
         */
-       actr_log(`${this.toString()} intersects ${other.toString()}`);
+        // actr_log(`${this.toString()} intersects ${other.toString()}`);
         if (this.point.x >= other.point.x + other.size.w) {
             return false;
         }
@@ -83,7 +83,7 @@ export class ActrQuadTree<T> {
         size: i64,
         private parent?: ActrQuadTree<T> | null
     ) {
-        this.bounds = new ActrQuadTreeBounds(x,y,size,size);
+        this.bounds = new ActrQuadTreeBounds(x, y, size, size);
     }
 
     private grow(): void {
@@ -271,7 +271,7 @@ export class ActrQuadTree<T> {
         this.items.push(newLeaf);
         newLeaf.parent = this;
         actr_log('tree insert');
-        
+
         if (this.items.length < LIST_MAX) {
             return;
         }
@@ -306,7 +306,7 @@ export class ActrQuadTree<T> {
             }
             const branch = this.branch[index];
             if (branch != null) {
-            branch.insert(newLeaf);
+                branch.insert(newLeaf);
             }
         }
         this.items.length = 0;
