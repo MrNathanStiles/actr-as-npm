@@ -20,8 +20,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import { actr_log } from "./log";
-
 /**
  * SurfaceNets in JavaScript ported to Assembly Script
  *
@@ -102,7 +100,7 @@ export class SurfaceNetGenerator {
 export class SurfaceNet {
     public constructor(
         public vertices: StaticArray<f32>,
-        public faces: StaticArray<i32>,
+        public faces: StaticArray<u32>,
     ) { }
 }
 
@@ -115,15 +113,13 @@ export class SurfaceData {
     public generateNet(): SurfaceNet {
         const data = this.data;
         const dims = this.dims;
-        // var vertices = []
-        // let faces = []
         let n = 0
             , x = new StaticArray<i32>(3)
             , R = new StaticArray<i32>(3)
             , grid = new StaticArray<f32>(8)
             , buf_no = 1;
         const vertices: Array<f32> = new Array();
-        const faces: Array<i32> = new Array();
+        const faces: Array<u32> = new Array();
         R[0] = 1;
         R[1] = dims[0] + 1;
         R[2] = (dims[0] + 1) * (dims[1] + 1);
@@ -131,7 +127,7 @@ export class SurfaceData {
         const buffer = (R[2] * 2 > 4096)
             ? new StaticArray<i32>(R[2] * 2)
             : new StaticArray<i32>(4096);
-        actr_log(`face prediction ${R[2] * 2}`);
+        
         let pushCount: i32 = 0;
         let maxx: f64 = 0;
         let maxy: f64 = 0;
@@ -244,23 +240,13 @@ export class SurfaceData {
 
                         //Remember to flip orientation depending on the sign of the corner.
                         if (mask & 1) {
-                            // faces.push([buffer[m], buffer[m - du], buffer[m - du - dv], buffer[m - dv]]);
                             faces.push(buffer[m]);
                             faces.push(buffer[m - du]);
                             faces.push(buffer[m - du - dv]);
                             faces.push(buffer[m]);
                             faces.push(buffer[m - du - dv]);
                             faces.push(buffer[m - dv]);
-                            /*
-                            indices[index    ] = face[0];
-                            indices[index + 1] = face[1];
-                            indices[index + 2] = face[2];
-                            indices[index + 3] = face[0];
-                            indices[index + 4] = face[2];
-                            indices[index + 5] = face[3];
-                            */
                         } else {
-                            //faces.push([buffer[m], buffer[m - dv], buffer[m - du - dv], buffer[m - du]]);
                             faces.push(buffer[m]);
                             faces.push(buffer[m - dv]);
                             faces.push(buffer[m - du - dv]);
@@ -275,8 +261,6 @@ export class SurfaceData {
         let fy: f32 = (f32)(maxx / 2);
         let fz: f32 = (f32)(maxx / 2);
         for (let i = 0; i < vertices.length; i += 3) {
-
-
             vertices[i] -= fx;
             vertices[i + 1] -= fy;
             vertices[i + 2] -= fz;

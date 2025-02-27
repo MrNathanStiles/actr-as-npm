@@ -64,7 +64,7 @@ export declare function actr_three_directional_light(color: i32): i32;
 
 // @ts-ignore
 @external("env", "actr_three_buffer_geometry")
-export declare function actr_three_buffer_geometry(indexCount: i32, indices: StaticArray<i32>, vertexCount: i32, vertices: StaticArray<f32>): i32;
+export declare function actr_three_buffer_geometry(indexCount: i32, indices: StaticArray<u32>, vertexCount: i32, vertices: StaticArray<f32>): i32;
 
 export interface IdentityObject {
     // actr identity
@@ -181,7 +181,7 @@ export class BufferGeometry implements IdentityObject {
     public constructor(
         identity?: i32,
         indexCount?: i32,
-        indices?: StaticArray<i32>,
+        indices?: StaticArray<u32>,
         vertexCount?: i32,
         vertices?: StaticArray<f32>,
     ) {
