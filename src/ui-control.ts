@@ -1,5 +1,4 @@
 import { actr_canvas2d_fill_rect, actr_canvas2d_fill_style_int, actr_canvas2d_stroke_rect, actr_canvas2d_stroke_style_int } from "./canvas";
-import { actr_log } from "./log";
 import { ActrPoint2 } from "./point";
 import { ActrQuadTreeLeaf } from "./quadtree";
 import { ActrUIControlContainer } from "./ui-control-container";
@@ -67,11 +66,9 @@ export class ActrUIControl {
 
         const packed = actr_pack_bytes(128,128, 128, 50);
         const unpcked = actr_unpack_bytes(packed);
-        // actr_log(`${unpcked[0]} ${unpcked[1]} ${unpcked[2]} ${unpcked[3]}`);
 
         const packed2 = actr_pack_bytes(unpcked[0], unpcked[1], unpcked[2], unpcked[3]);
         const unpcked2 = actr_unpack_bytes(packed2);
-        // actr_log(`${packed} ${packed2}`);
 
         this.backgroundColor = actr_pack_bytes(127, 127, 127, 100);
         this.foregroundColor = actr_pack_bytes(0, 0, 0, 100);

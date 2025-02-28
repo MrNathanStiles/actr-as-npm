@@ -1,4 +1,3 @@
-import { actr_log } from "./log";
 import { ActrPoint2 } from "./point";
 import { ActrSize2 } from "./size";
 
@@ -27,7 +26,6 @@ export class ActrQuadTreeBounds {
             RectA.Top > RectB.Bottom &&
             RectA.Bottom < RectB.Top
         */
-        // actr_log(`${this.toString()} intersects ${other.toString()}`);
         if (this.point.x >= other.point.x + other.size.w) {
             return false;
         }
@@ -270,7 +268,6 @@ export class ActrQuadTree<T> {
         }
         this.items.push(newLeaf);
         newLeaf.parent = this;
-        actr_log('tree insert');
 
         if (this.items.length < LIST_MAX) {
             return;

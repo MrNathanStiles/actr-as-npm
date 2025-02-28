@@ -1,7 +1,4 @@
-
-
 import { actr_canvas2d_fill_rect, actr_canvas2d_fill_style } from "./canvas";
-import { actr_log } from "./log";
 import { ActrQuadTree, ActrQuadTreeBounds, ActrQuadTreeLeaf } from "./quadtree";
 import { ActrSize2 } from "./size";
 import { ActrUIControl, ActrUIType } from "./ui-control";
@@ -193,10 +190,8 @@ export class ActrUIState {
         // clear canvas
         actr_canvas2d_fill_style(0, 0, 0, 100);
         actr_canvas2d_fill_rect(-10, -10, (f32)(this.canvasSize.w + 20), (f32)(this.canvasSize.h + 20));
-        // actr_log(`canvas size ${this.canvasSize.w}.${this.canvasSize.h}`);
         const results = this.query(0, 0, this.canvasSize.w, this.canvasSize.h);
 
-        // actr_log(`drawing ${results.length}`);
         for (let i = 0; i < results.length; i++) {
             const leaf = results[i];
             const control = leaf.item as ActrUIControl;

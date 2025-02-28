@@ -1,4 +1,3 @@
-import { actr_log } from "./log";
 import { ActrOctree } from "./octree";
 import { ActrOctreeLeaf } from "./octree-leaf";
 import { actr_three_dispose_geometry, actr_three_dispose_material, actr_three_scene_add, actr_three_scene_remove, BoxGeometry, Mesh, MeshStandardMaterial, Vector3 } from "./three";
@@ -53,7 +52,8 @@ export class Cube {
             size, size, size,
             this.mesh.identity
         );
-        actr_log(`leaf ${leaf} added to ${leaf.parent}`);
         tree.insert(leaf);
+        
+        
     }
 }

@@ -2,14 +2,7 @@ import { Cube } from "./cube";
 import { ActrOctreeBounds } from "./octree-bounds";
 import { ActrOctreeLeaf } from "./octree-leaf";
 
-
-
 const LIST_MAX: i32 = 2;
-
-
-
-
-
 
 export class ActrOctree {
     private readonly items: ActrOctreeLeaf[] = [];
@@ -95,7 +88,7 @@ export class ActrOctree {
             // 4 5
             // 7 6
             // 2 becomes 4 in new 2
-            newTree = new ActrOctree(false, this.bounds.point.x + halfSize, this.bounds.point.y + halfSize, this.bounds.point.z + halfSize, size, this, this.visible);
+            newTree = new ActrOctree(false, this.bounds.point.x + halfSize, this.bounds.point.y - halfSize, this.bounds.point.z + halfSize, size, this, this.visible);
             branch.parent = newTree;
             newTree.branch[4] = branch;
             this.branch[2] = newTree;
@@ -107,7 +100,7 @@ export class ActrOctree {
             // 4 5
             // 7 6
             // 3 becomes 5 in new 3
-            newTree = new ActrOctree(false, this.bounds.point.x - halfSize, this.bounds.point.y + halfSize, this.bounds.point.z + halfSize, size, this, this.visible);
+            newTree = new ActrOctree(false, this.bounds.point.x - halfSize, this.bounds.point.y - halfSize, this.bounds.point.z + halfSize, size, this, this.visible);
             branch.parent = newTree;
             newTree.branch[5] = branch;
             this.branch[3] = newTree;
@@ -120,7 +113,7 @@ export class ActrOctree {
             // 4 5
             // 7 6
             // 4 becomes 2 in new 4
-            newTree = new ActrOctree(false, this.bounds.point.x - halfSize, this.bounds.point.y - halfSize, this.bounds.point.z - halfSize, size, this, this.visible);
+            newTree = new ActrOctree(false, this.bounds.point.x - halfSize, this.bounds.point.y + halfSize, this.bounds.point.z - halfSize, size, this, this.visible);
             branch.parent = newTree;
             newTree.branch[2] = branch;
             this.branch[4] = newTree;
@@ -132,7 +125,7 @@ export class ActrOctree {
             // 4 5
             // 7 6
             // 5 becomes 3 in new 5
-            newTree = new ActrOctree(false, this.bounds.point.x + halfSize, this.bounds.point.y - halfSize, this.bounds.point.z - halfSize, size, this, this.visible);
+            newTree = new ActrOctree(false, this.bounds.point.x + halfSize, this.bounds.point.y + halfSize, this.bounds.point.z - halfSize, size, this, this.visible);
             branch.parent = newTree;
             newTree.branch[3] = branch;
             this.branch[5] = newTree;
@@ -187,8 +180,8 @@ export class ActrOctree {
         // 3 2
         // 4 5
         // 7 6
-        const ymid: i64 = this.bounds.point.y + (this.bounds.size / 2);
         const xmid: i64 = this.bounds.point.x + (this.bounds.size / 2);
+        const ymid: i64 = this.bounds.point.y + (this.bounds.size / 2);
         const zmid: i64 = this.bounds.point.z - (this.bounds.size / 2);
 
         if (bounds.point.y + bounds.size.h <= ymid) {
@@ -356,6 +349,14 @@ export class ActrOctree {
 
         this.branch[index] = new ActrOctree(false, x, y, z, size, this, this.visible);
     }
+    private myIndex(): i32 {
+        if (this.parent) {
+            for (let i: i32 = 0; i < 8; i++) {
+                if (this.parent!.branch[i] == this) return i;
+            }
+        }
+        return -1;
+    }
     public insert(newLeaf: ActrOctreeLeaf): void {
         if (this.root) {
             while (!this.bounds.containsLeaf(newLeaf)) {
@@ -364,7 +365,7 @@ export class ActrOctree {
         }
         this.items.push(newLeaf);
         newLeaf.parent = this;
-
+        
         if (this.items.length < LIST_MAX) {
             return;
         }
@@ -373,15 +374,13 @@ export class ActrOctree {
             const index = this.index(newLeaf);
             if (index < 0) {
                 this.stuck.push(newLeaf);
-                newLeaf.parent = this;
                 continue;
             }
             this.generateBranch(index);
             
-            const branch = this.branch[index];
-            if (branch != null) {
-                branch.insert(newLeaf);
-            }
+            const branch: ActrOctree = this.branch[index]!;
+            branch.insert(newLeaf);
+            
         }
         this.items.length = 0;
     }

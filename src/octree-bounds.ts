@@ -49,7 +49,6 @@ export class ActrOctreeBounds {
             RectA.Top > RectB.Bottom &&
             RectA.Bottom < RectB.Top
         */
-        // actr_log(`${this.toString()} intersects ${other.toString()}`);
         if (this.point.x >= other.point.x + other.size) {
             return false;
         }
@@ -102,7 +101,6 @@ export class ActrOctreeBounds {
             result = true;
         }
 
-        // actr_log(`${this} containsLeaf ${leaf} ${result}`);
         return result;
     }
     public toString(): string {
