@@ -1,32 +1,52 @@
 
-export class ActrPoint32 {
-    public constructor(
-        public x: i32,
-        public y: i32,
-    ) {
-    }
-    
-    public toString(): string {
-        return `ActrPoint32:${this.x}.${this.y}`;
-    }
-}
-export class ActrPoint64 {
-
+export class ActrPoint2 {
     public constructor(
         public x: i64,
         public y: i64,
     ) {
     }
+    
+    public toString(): string {
+        return `ActrPoint2:${this.x}.${this.y}`;
+    }
+}
+export class ActrPoint3 {
+
+    public constructor(
+        public x: i64,
+        public y: i64,
+        public z: i64,
+    ) {
+    }
 
     public toString(): string {
-        return `ActrPoint64:${this.x}.${this.y}`;
+        return `ActrPoint3:x:${this.x}:y:${this.y}:z:${this.z}`;
     }
 }
 
-export class ActrPointD {
+export class ActrPoint2D {
+
     public constructor(
         public x: f64,
         public y: f64,
     ) {
+    }
+
+    public toString(): string {
+        return `ActrPoint2D:${this.x}.${this.y}`;
+    }
+}
+
+export class ActrPoint3D {
+
+    public constructor(
+        public x: f64,
+        public y: f64,
+        public z: f64,
+    ) {
+    }
+
+    public toString(): string {
+        return `ActrPoint3D:${this.x}.${this.y}.${this.z}`;
     }
 }

@@ -1,7 +1,7 @@
 import { actr_canvas2d_fill_rect, actr_canvas2d_fill_style_int, actr_canvas2d_stroke_rect, actr_canvas2d_stroke_style_int } from "./canvas";
 import { actr_log } from "./log";
-import { ActrPoint64 } from "./point";
-import { ActrQuadTreeLeaf } from "./quad-tree";
+import { ActrPoint2 } from "./point";
+import { ActrQuadTreeLeaf } from "./quadtree";
 import { ActrUIControlContainer } from "./ui-control-container";
 import { actr_pack_bytes, actr_unpack_bytes, ActrUIState } from "./ui-state";
 
@@ -39,8 +39,8 @@ export class ActrUIControl {
         return this.uiState.isFocused(this);
     }
 
-    public get position(): ActrPoint64 {
-        const result = new ActrPoint64(
+    public get position(): ActrPoint2 {
+        const result = new ActrPoint2(
             this.leaf!.bounds.point.x,
             this.leaf!.bounds.point.y
         );
@@ -67,11 +67,11 @@ export class ActrUIControl {
 
         const packed = actr_pack_bytes(128,128, 128, 50);
         const unpcked = actr_unpack_bytes(packed);
-        actr_log(`${unpcked[0]} ${unpcked[1]} ${unpcked[2]} ${unpcked[3]}`);
+        // actr_log(`${unpcked[0]} ${unpcked[1]} ${unpcked[2]} ${unpcked[3]}`);
 
         const packed2 = actr_pack_bytes(unpcked[0], unpcked[1], unpcked[2], unpcked[3]);
         const unpcked2 = actr_unpack_bytes(packed2);
-        actr_log(`${packed} ${packed2}`);
+        // actr_log(`${packed} ${packed2}`);
 
         this.backgroundColor = actr_pack_bytes(127, 127, 127, 100);
         this.foregroundColor = actr_pack_bytes(0, 0, 0, 100);
@@ -97,7 +97,7 @@ export class ActrUIControl {
         const hovered = this.isHovered;
         this.drawBackground(position, this.isFocused, hovered);
     }
-    protected drawBackground(position: ActrPoint64, focused: bool, hovered: bool): void {
+    protected drawBackground(position: ActrPoint2, focused: bool, hovered: bool): void {
 
         if (focused) actr_canvas2d_fill_style_int(this.backgroundColorFocused);
         else if (hovered) actr_canvas2d_fill_style_int(this.backgroundColorHovered);
@@ -108,7 +108,7 @@ export class ActrUIControl {
         actr_canvas2d_fill_rect((f32)(position.x), (f32)(position.y), (f32)(leaf.bounds.size.w), (f32)(leaf.bounds.size.h));
     }
 
-    protected drawBorder(position: ActrPoint64, focused: bool, hovered: bool): void {
+    protected drawBorder(position: ActrPoint2, focused: bool, hovered: bool): void {
 
         if (focused) actr_canvas2d_stroke_style_int(this.borderColorFocused);
         else if (hovered) actr_canvas2d_stroke_style_int(this.borderColorHovered);

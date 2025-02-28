@@ -55,12 +55,24 @@ export declare function actr_three_webglrenderer_setsize(width: i32, height: i32
 export declare function actr_three_object32_id(identity: i32): i32;
 
 // @ts-ignore
+@external("env", "actr_three_scene_remove")
+export declare function actr_three_scene_remove(identity: i32): void;
+
+// @ts-ignore
+@external("env", "actr_three_dispose_material")
+export declare function actr_three_dispose_material(identity: i32): void;
+
+// @ts-ignore
+@external("env", "actr_three_dispose_geometry")
+export declare function actr_three_dispose_geometry(identity: i32): void;
+
+// @ts-ignore
 @external("env", "actr_three_ambient_light")
-export declare function actr_three_ambient_light(color: i32): i32;
+export declare function actr_three_ambient_light(color: i32, intensity: f32): i32;
 
 // @ts-ignore
 @external("env", "actr_three_directional_light")
-export declare function actr_three_directional_light(color: i32): i32;
+export declare function actr_three_directional_light(color: i32, intensity: f32): i32;
 
 // @ts-ignore
 @external("env", "actr_three_buffer_geometry")
@@ -128,18 +140,20 @@ export class Light extends Object3D {
 
 export class DirectionalLight extends Light {
     public constructor(
-        public readonly color: i32
+        public readonly color: i32,
+        public readonly intensity: f32,
     ) {
-        super(actr_three_directional_light(color));
+        super(actr_three_directional_light(color, intensity));
     }
 }
 
 export class AmbientLight extends Light {
 
     public constructor(
-        public readonly color: i32
+        public readonly color: i32,
+        public readonly intensity: f32,
     ) {
-        super(actr_three_ambient_light(color))
+        super(actr_three_ambient_light(color, intensity))
     }
 }
 
@@ -179,16 +193,16 @@ export class BufferGeometry implements IdentityObject {
     public readonly identity: i32;
     
     public constructor(
-        identity?: i32,
-        indexCount?: i32,
-        indices?: StaticArray<u32>,
-        vertexCount?: i32,
-        vertices?: StaticArray<f32>,
+        identity: i32,
+        indexCount: i32,
+        indices: StaticArray<u32> | null,
+        vertexCount: i32,
+        vertices: StaticArray<f32> | null,
     ) {
         if (identity) {
             this.identity = identity;
         } else {
-            this.identity = actr_three_buffer_geometry(indexCount!, indices!, vertexCount!, vertices!);
+            this.identity = actr_three_buffer_geometry(indexCount, indices!, vertexCount, vertices!);
         }
      }
 }
@@ -200,7 +214,7 @@ export class BoxGeometry extends BufferGeometry {
         public readonly height: f32, 
         public readonly depth: f32,
     ) {
-        super(actr_three_box_geometry(width, height, depth));
+        super(actr_three_box_geometry(width, height, depth), 0, null, 0, null);
     }
 }
 

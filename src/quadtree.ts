@@ -1,20 +1,20 @@
 import { actr_log } from "./log";
-import { ActrPoint64, ActrPointD } from "./point";
-import { ActrSize64 } from "./size";
+import { ActrPoint2 } from "./point";
+import { ActrSize2 } from "./size";
 
 const LIST_MAX: i32 = 2;
 
 export class ActrQuadTreeBounds {
-    public readonly point: ActrPoint64;
-    public readonly size: ActrSize64;
+    public readonly point: ActrPoint2;
+    public readonly size: ActrSize2;
 
     public constructor(x: i64, y: i64, w: i64, h: i64) {
-        this.point = new ActrPoint64(x, y);
-        this.size = new ActrSize64(w, h);
+        this.point = new ActrPoint2(x, y);
+        this.size = new ActrSize2(w, h);
     }
 
-    public center(): ActrPointD {
-        const result = new ActrPointD(0, 0)
+    public center(): ActrPoint2 {
+        const result = new ActrPoint2(0, 0)
         result.x = this.point.x + this.size.w / 2;
         result.y = this.point.y + this.size.h / 2;
         return result;
