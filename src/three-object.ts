@@ -1,4 +1,4 @@
-import { Euler, IdentityObject, Vector3 } from "./three";
+import { _actr_three_buffer, Euler, IdentityObject, Vector3 } from "./three";
 
 // @ts-ignore
 @external("env", "actr_three_object_id")
@@ -24,13 +24,35 @@ export declare function actr_three_object_remove(containerIdentity: i32, objectI
 @external("env", "actr_three_object_rotation")
 export declare function actr_three_object_rotation(identity: i32, x: f32, y: f32, z: f32): void;
 
+// @ts-ignore
+@external("env", "actr_three_object_rotate")
+export declare function actr_three_object_rotate(identity: i32, x: f32, y: f32, z: f32): void;
+
+// @ts-ignore
+@external("env", "actr_three_object_move_local")
+export declare function actr_three_object_move_local(identity: i32, x: f32, y: f32, z: f32): void;
+
+// @ts-ignore
+@external("env", "actr_three_object_move_world")
+export declare function actr_three_object_move_world(identity: i32, x: f32, y: f32, z: f32): void;
+
+// @ts-ignore
+@external("env", "actr_three_object_to_local")
+export declare function actr_three_object_to_local(identity: i32, x: f32, y: f32, z: f32): void;
+
+
+// @ts-ignore
+@external("env", "actr_three_object_to_world")
+export declare function actr_three_object_to_world(identity: i32, x: f32, y: f32, z: f32): void;
+
+
 
 export class Object3D implements IdentityObject {
     // THREE.js Object3D id
     public get _id(): i32 {
         return actr_three_object32_id(this.identity);
     }
-    
+
     private _position: Vector3 = new Vector3(0, 0, 0);
     public get position(): Vector3 {
         return this._position;
@@ -54,7 +76,7 @@ export class Object3D implements IdentityObject {
     public constructor(
         public readonly identity: i32,
     ) {
-        
+
     }
 
     public add(object: Object3D): void {
@@ -67,5 +89,27 @@ export class Object3D implements IdentityObject {
 
     public remove(object: Object3D): void {
         actr_three_object_remove(this.identity, object.identity);
+    }
+
+    public rotate(x: f32, y: f32, z: f32): void {
+        actr_three_object_rotate(this.identity, x, y, z);
+    }
+
+    public moveLocal(x: f32, y: f32, z: f32): void {
+        actr_three_object_move_local(this.identity, x, y, z);
+    }
+
+    public moveWorld(vector: Vector3): void {
+        actr_three_object_move_world(this.identity, vector.x, vector.y, vector.z);
+    }
+
+    public toLocal(vector: Vector3): Vector3 {
+        actr_three_object_to_local(this.identity, vector.x, vector.y, vector.z);
+        return new Vector3(_actr_three_buffer[0], _actr_three_buffer[1], _actr_three_buffer[2]);
+    }
+
+    public toWorld(vector: Vector3): Vector3 {
+        actr_three_object_to_world(this.identity, vector.x, vector.y, vector.z);
+        return new Vector3(_actr_three_buffer[0], _actr_three_buffer[1], _actr_three_buffer[2]);
     }
 }
