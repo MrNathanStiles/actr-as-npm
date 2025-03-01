@@ -20,6 +20,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+import { actr_log } from "./log";
+import { BufferGeometry } from "./three-geometry";
+import { MeshStandardMaterial } from "./three-material";
+import { Mesh } from "./three-mesh";
+import { Scene } from "./three-scene";
+
 /**
  * SurfaceNets in JavaScript ported to Assembly Script
  *
@@ -95,14 +101,52 @@ export class SurfaceNetGenerator {
     }
 }
 
-
+/*
+    In that case you should be able to just scale it by (1000/distance I want it to look like).
+    e.g. if you want it to look like it's 50,000 units away, put it 1000 units away and scale by 1/50.
+*/
 
 export class SurfaceNet {
+    private readonly geometry: BufferGeometry;
+    private readonly material: MeshStandardMaterial;
+    private readonly mesh: Mesh;
+    private scene: Scene | null = null;
+    private disposed: bool = false;
     public constructor(
-        public vertices: StaticArray<f32>,
-        public faces: StaticArray<u32>,
-    ) { }
-}
+        public readonly vertices: StaticArray<f32>,
+        public readonly indices: StaticArray<u32>,
+    ) {
+        const geometry = new BufferGeometry(0, indices.length, indices, vertices.length, vertices);
+        const material = new MeshStandardMaterial(0xffffff, 0x000000, false, 0, true, true);
+        
+        this.geometry = geometry;
+        this.material = material;
+        this.mesh = new Mesh(geometry, material);
+            
+    }
+
+    public dispose(): void {
+        if (this.disposed) return;
+        this.removeFromScene();
+        this.geometry.dispose();
+        this.material.dispose();
+        this.disposed = true;
+    }
+
+    public addToScene(scene: Scene): void {
+        if (this.disposed) return;
+        if (this.scene) return;
+        this.scene = scene;
+        scene.add(this.mesh);
+    }
+
+    public removeFromScene(): void {
+        if (this.disposed) return;
+        if (this.scene == null) return;
+        this.scene.remove(this.mesh);
+        this.scene = null;
+    }
+ }
 
 export class SurfaceData {
     public constructor(
@@ -129,9 +173,14 @@ export class SurfaceData {
             : new StaticArray<i32>(4096);
         
         let pushCount: i32 = 0;
-        let maxx: f64 = 0;
-        let maxy: f64 = 0;
-        let maxz: f64 = 0;
+        let minx: f64 = f64.MAX_SAFE_INTEGER;
+        let miny: f64 = f64.MAX_SAFE_INTEGER;
+        let minz: f64 = f64.MAX_SAFE_INTEGER;
+        
+        let maxx: f64 = f64.MIN_SAFE_INTEGER;
+        let maxy: f64 = f64.MIN_SAFE_INTEGER;
+        let maxz: f64 = f64.MIN_SAFE_INTEGER;
+        
         // March over the voxel grid
         for (x[2] = 0; x[2] < dims[2] - 1; ++x[2], n += dims[0], buf_no ^= 1, R[2] = -R[2]) {
 
@@ -211,9 +260,15 @@ export class SurfaceData {
 
                     //Add vertex to buffer, store pointer to vertex index in buffer
                     buffer[m] = pushCount++;
+
+                    minx = Math.min(v[0], minx);
+                    miny = Math.min(v[1], miny);
+                    minz = Math.min(v[2], minz);
+                    
                     maxx = Math.max(v[0], maxx);
-                    maxy = Math.max(v[0], maxy);
-                    maxz = Math.max(v[0], maxz);
+                    maxy = Math.max(v[1], maxy);
+                    maxz = Math.max(v[2], maxz);
+                    
                     vertices.push(v[0]);
                     vertices.push(v[1]);
                     vertices.push(v[2]);
@@ -257,13 +312,22 @@ export class SurfaceData {
                     }
                 }
         }
-        let fx: f32 = (f32)(maxx / 2);
-        let fy: f32 = (f32)(maxx / 2);
-        let fz: f32 = (f32)(maxx / 2);
+        let fx: f32 = (f32)(minx + (maxx - minx) / 2);
+        let fy: f32 = (f32)(miny + (maxy - miny) / 2);
+        let fz: f32 = (f32)(minz + (maxz - minz) / 2);
+        
+        let mx: f32 = (f32)(minx);
+        let my: f32 = (f32)(miny);
+        let mz: f32 = (f32)(minz);
+        actr_log(`min ${mx}`)
         for (let i = 0; i < vertices.length; i += 3) {
             vertices[i] -= fx;
             vertices[i + 1] -= fy;
             vertices[i + 2] -= fz;
+
+            //vertices[i] -= mx;
+            //vertices[i + 1] -= my;
+            //vertices[i + 2] -= mz;
         }
         // All done!  Return the result
         return new SurfaceNet(StaticArray.fromArray(vertices), StaticArray.fromArray(faces));
