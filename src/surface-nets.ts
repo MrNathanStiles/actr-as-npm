@@ -117,7 +117,7 @@ export class SurfaceNet {
         public readonly indices: StaticArray<u32>,
     ) {
         const geometry = new BufferGeometry(0, indices.length, indices, vertices.length, vertices);
-        const material = new MeshStandardMaterial(0xffffff, 0x000000, false, 0, true, true);
+        const material = new MeshStandardMaterial(0xffffff, 0x000000, false, 0, false, true);
         
         this.geometry = geometry;
         this.material = material;
