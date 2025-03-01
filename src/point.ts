@@ -19,6 +19,10 @@ export class ActrPoint3 {
     ) {
     }
 
+    public equals(other: ActrPoint3): bool {
+        return this.x == other.x && this.y == other.y && this.z == other.z;
+    }
+
     public toString(): string {
         return `ActrPoint3:x:${this.x}:y:${this.y}:z:${this.z}`;
     }

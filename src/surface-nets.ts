@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import { actr_log } from "./log";
+import { Vector3 } from "./three";
 import { BufferGeometry } from "./three-geometry";
 import { MeshStandardMaterial } from "./three-material";
 import { Mesh } from "./three-mesh";
@@ -112,6 +112,19 @@ export class SurfaceNet {
     private readonly mesh: Mesh;
     private scene: Scene | null = null;
     private disposed: bool = false;
+
+    public get position(): Vector3 {
+        return this.mesh.position;
+    }
+
+    public set position(value: Vector3) {
+        this.mesh.position = value;
+    }
+
+    public get identity(): i32 {
+        return this.mesh.identity;
+    }
+
     public constructor(
         public readonly vertices: StaticArray<f32>,
         public readonly indices: StaticArray<u32>,
@@ -122,7 +135,7 @@ export class SurfaceNet {
         this.geometry = geometry;
         this.material = material;
         this.mesh = new Mesh(geometry, material);
-            
+
     }
 
     public dispose(): void {
@@ -315,11 +328,6 @@ export class SurfaceData {
         let fx: f32 = (f32)(minx + (maxx - minx) / 2);
         let fy: f32 = (f32)(miny + (maxy - miny) / 2);
         let fz: f32 = (f32)(minz + (maxz - minz) / 2);
-        
-        let mx: f32 = (f32)(minx);
-        let my: f32 = (f32)(miny);
-        let mz: f32 = (f32)(minz);
-        actr_log(`min ${mx}`)
         for (let i = 0; i < vertices.length; i += 3) {
             vertices[i] -= fx;
             vertices[i + 1] -= fy;

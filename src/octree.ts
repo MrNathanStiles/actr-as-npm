@@ -411,7 +411,7 @@ export class ActrOctree {
         while (this.items.length > 0) {
             newLeaf = this.items.pop();
             const index = this.index(newLeaf);
-            if (index < 0) {
+            if (index < 0 || this.bounds.size == 4) {
                 this.stuck.push(newLeaf);
                 continue;
             }

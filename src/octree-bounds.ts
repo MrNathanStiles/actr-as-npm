@@ -104,6 +104,6 @@ export class ActrOctreeBounds {
         return result;
     }
     public toString(): string {
-        return `ActrQuadTreeBounds:point:${this.point.toString()}:size:${this.size.toString()}`
+        return `ActrOctreeBounds:point:${this.point.toString()}:size:${this.size.toString()}`
     }
 }

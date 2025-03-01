@@ -1,3 +1,4 @@
+import { ftoi } from "..";
 import { ActrOctree } from "./octree";
 import { ActrOctreeLeaf } from "./octree-leaf";
 import { Vector3 } from "./three";
@@ -63,9 +64,9 @@ export class Cube {
     public addToTree(tree: ActrOctree): void {
         const size = (i64)(Math.round(this.size));
         const leaf = new ActrOctreeLeaf(
-            (i64)(Math.round(this.x - this.size / 2)),
-            (i64)(Math.round(this.y - this.size / 2)),
-            (i64)(Math.round(this.z + this.size / 2)),
+            ftoi(this.x - this.size / 2),
+            ftoi(this.y - this.size / 2),
+            ftoi(this.z - this.size / 2),
             size, size, size,
             this.mesh.identity
         );

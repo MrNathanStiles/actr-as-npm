@@ -29,6 +29,12 @@ export * from './src/ui-control-text';
 export * from './src/ui-control';
 export * from './src/ui-state';
 
+export function ftoi(value: f64): i64 {
+    if (value < 0) return (i64)(value - 1);
+    if (value > 0) return (i64)(value + 1);
+    return 0;
+}
+
 // @ts-ignore
 @external("env", "actr_debugger")
 export declare function actr_debugger(value: i32): void;
