@@ -55,4 +55,11 @@ export class ActrSize3F {
     public toString(): string {
         return `ActrSize3F:${this.w}.${this.h}.${this.d}`;
     }
+    public fill(): ActrSize3F {
+        return new ActrSize3F(
+            this.w < 0 ? Mathf.floor(this.w) : Mathf.ceil(this.w),
+            this.h < 0 ? Mathf.floor(this.h) : Mathf.ceil(this.h),
+            this.d < 0 ? Mathf.floor(this.d) : Mathf.ceil(this.d),
+        );
+    }
 }

@@ -78,11 +78,3 @@ export function precomputeEdgeTable(): void {
     In that case you should be able to just scale it by (1000/distance I want it to look like).
     e.g. if you want it to look like it's 50,000 units away, put it 1000 units away and scale by 1/50.
 */
-
-
-
-
-
-
-
-

@@ -37,7 +37,7 @@ export class ActrOctreeLeaf {
             stuck ? 0x888888 : 0x00ffff,
             true,
             0.25,
-            true,
+            false,
             false
         );
         this.cube!.addToScene(scene)

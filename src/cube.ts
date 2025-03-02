@@ -15,7 +15,7 @@ export class Cube {
     private disposed: bool = false;
 
     public static makeSimple(size: f32, x: f32, y: f32, z: f32, color: i32): Cube {
-        return new Cube(size, x, y, z, color, color, false, 1, false, true);
+        return new Cube(size, x, y, z, color, color, true, 0.5, false, true);
     }
     
     public constructor(
@@ -61,12 +61,13 @@ export class Cube {
     }
 
     public addToTree(tree: ActrOctree): void {
-        const size = FTOI(this.size);
+        const sizef = Mathf.ceil(this.size);
+        const size = FTOI(sizef) + 1;
         const position = this.mesh.position;
         const leaf = new ActrOctreeLeaf(
-            FTOL(position.x - this.size / 2),
-            FTOL(position.y - this.size / 2),
-            FTOL(position.z - this.size / 2),
+            FTOL(Mathf.floor(position.x - sizef * 0.5)),
+            FTOL(Mathf.floor(position.y - sizef * 0.5)),
+            FTOL(Mathf.ceil(position.z + sizef * 0.5)),
             size, size, size,
             this.mesh.identity
         );

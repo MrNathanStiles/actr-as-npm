@@ -33,6 +33,16 @@ export class ActrOctree {
         return `ActrOctree:bounds:${this.bounds}`;
     }
 
+    public isEmpty(): bool {
+        if (this.stuck.length) return false;
+        if (this.items.length) return false;
+        for (let i = 0; i < 8; i++) {
+            if (this.branch[i] == null) continue;
+            if (!this.branch[i]!.isEmpty()) return false;
+        }
+        return true;
+    }
+
     private visualize(): void {
         if (this.scene == null) return;
         if (this.cube) {
@@ -287,20 +297,7 @@ export class ActrOctree {
             }
         }
 
-        if (parent.items.length > 0) {
-            return;
-        }
-
-        if (parent.stuck.length > 0) {
-            return;
-        }
-
-        for (let i = 0; i < 8; i++) {
-            if (parent.branch[i]) {
-                return;
-            }
-        }
-        this.removeTree(parent);
+        if (parent.isEmpty()) this.removeTree(parent);
     }
 
     public removeLeaf(leaf: ActrOctreeLeaf): void {
@@ -316,20 +313,7 @@ export class ActrOctree {
             }
         }
 
-        if (tree.items.length > 0) {
-            return;
-        }
-
-        if (tree.stuck.length > 0) {
-            return;
-        }
-
-        for (let i = 0; i < 8; i++) {
-            if (tree.branch[i]) {
-                return;
-            }
-        }
-        this.removeTree(tree);
+        if (tree.isEmpty()) this.removeTree(tree);
     }
 
     private generateBranch(index: i32): void {

@@ -182,6 +182,6 @@ export class SurfaceNetData {
             //vertices[i + 2] -= mz;
         }
         // All done!  Return the result
-        return new SurfaceNet(StaticArray.fromArray(vertices), StaticArray.fromArray(faces), size);
+        return new SurfaceNet(StaticArray.fromArray(vertices), StaticArray.fromArray(faces), size.fill());
     }
 }

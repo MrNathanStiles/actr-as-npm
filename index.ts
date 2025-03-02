@@ -32,11 +32,11 @@ export * from './src/ui-control';
 export * from './src/ui-state';
 
 export function DTOI(value: f64): i32 {
-    return (i32)(Math.round(value));
+    return (i32)(value);
 }
 
 export function DTOL(value: f64): i64 {
-    return (i64)(Math.round(value));
+    return (i64)(value);
 }
 
 export function DTOF(value: f64): f32 {
@@ -44,11 +44,11 @@ export function DTOF(value: f64): f32 {
 }
 
 export function FTOL(value: f32): i64 {
-    return (i64)(Math.round(value));
+    return (i64)(value);
 }
 
 export function FTOI(value: f32): i32 {
-    return (i32)(Math.round(value));
+    return (i32)(value);
 }
 
 export function FTOD(value: f32): f64 {
