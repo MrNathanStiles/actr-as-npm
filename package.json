@@ -1,6 +1,6 @@
 {
   "name": "@actr-wasm/as",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "",
   "main": "index.ts",
   "type": "module",
