@@ -23,7 +23,7 @@ export class ActrOctree {
         z: i64,
         size: i64,
         private parent: ActrOctree | null,
-        public readonly scene: Scene
+        public readonly scene: Scene | null
     ) {
         this.bounds = new ActrOctreeBounds(x, y, z, size);
         this.visualize();
@@ -34,31 +34,31 @@ export class ActrOctree {
     }
 
     private visualize(): void {
+        if (this.scene == null) return;
         if (this.cube) {
             this.cube!.dispose();
         }
-        if (this.scene) {
-            this.cube = new Cube(
-                (f32)(this.bounds.size),
-                (f32)(this.bounds.point.x + this.bounds.size / 2),
-                (f32)(this.bounds.point.y + this.bounds.size / 2),
-                (f32)(this.bounds.point.z - this.bounds.size / 2),
-                0x00ff00,
-                0x00ff00,
-                true,
-                0.1,
-                true,
-                false
-            );
-            this.cube!.addToScene(this.scene)
-        }
+        this.cube = new Cube(
+            (f32)(this.bounds.size),
+            (f32)(this.bounds.point.x + this.bounds.size / 2),
+            (f32)(this.bounds.point.y + this.bounds.size / 2),
+            (f32)(this.bounds.point.z - this.bounds.size / 2),
+            0x00ff00,
+            0x00ff00,
+            true,
+            0.1,
+            true,
+            false
+        );
+        this.cube!.addToScene(this.scene!);
+
 
         for (let i = 0; i < this.stuck.length; i++) {
-            this.stuck[i].visualize(this.scene);
+            this.stuck[i].visualize(this.scene!, true);
         }
 
         for (let i = 0; i < this.items.length; i++) {
-            this.items[i].visualize(this.scene);
+            this.items[i].visualize(this.scene!, false);
         }
     }
 
@@ -376,8 +376,8 @@ export class ActrOctree {
             const i0 = surfaceNet.indices[i];
             const i1 = surfaceNet.indices[i + 1];
             const i2 = surfaceNet.indices[i + 2];
-            
-            
+
+
             const v0 = new ActrPoint3F(
                 surfaceNet.vertices[i0],
                 surfaceNet.vertices[i0 + 1],
@@ -412,7 +412,7 @@ export class ActrOctree {
         }
         this.items.push(newLeaf);
         newLeaf.parent = this;
-        
+
 
         if (this.items.length < LIST_MAX) {
             this.visualize();

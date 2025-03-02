@@ -1,6 +1,8 @@
 //This code is from Kas Thomas' blog:
 //  http://asserttrue.blogspot.de/2011/12/perlin-noise-in-javascript_31.html
 
+import { DTOI } from "..";
+
 // This is a port of Ken Perlin's Java code. The
 // original Java code is at http://cs.nyu.edu/%7Eperlin/noise/.
 // Note that in this version, a number from 0 to 1 is returned.
@@ -54,7 +56,8 @@ export class PerlinNoise {
     }
 
     public shuffle(): void {
-        this.permutation.sort((a, b) => (i32)(1000 * (Math.random() - 0.5)));
+        // this.permutation.sort((a, b) => (i32)(1000 * (Math.random() - 0.5)));
+        this.permutation.sort(() => DTOI(Math.random() * 2 - 1));
         this.initPerlinNoise();
     }
     

@@ -22,7 +22,7 @@ export class ActrOctreeLeaf {
             this.point.z - this.size.d / 2
         );
     }
-    public visualize(scene: Scene): void {
+    public visualize(scene: Scene, stuck: bool): void {
         if (this.cube) {
             this.cube!.dispose();
         }
@@ -33,10 +33,10 @@ export class ActrOctreeLeaf {
             LTOF(center.x),
             LTOF(center.y),
             LTOF(center.z),
-            0xff00ff,
-            0xff00Ff,
+            stuck ? 0x888888 : 0x00ffff,
+            stuck ? 0x888888 : 0x00ffff,
             true,
-            0.1,
+            0.25,
             true,
             false
         );

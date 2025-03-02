@@ -31,6 +31,10 @@ export * from './src/ui-control-text';
 export * from './src/ui-control';
 export * from './src/ui-state';
 
+export function DTOI(value: f64): i32 {
+    return (i32)(Math.round(value));
+}
+
 export function DTOL(value: f64): i64 {
     return (i64)(Math.round(value));
 }
@@ -79,8 +83,9 @@ export declare function _actr_sanity(encoding: i32): void;
 export function actr_construct(): void {
     _actr_sanity(UTF16);
 }
-
-@global function __finalize(ptr: usize): void {
+// @ts-ignore
+@global 
+function __finalize(ptr: usize): void {
     const obj = changetype<OBJECT>(ptr - TOTAL_OVERHEAD)
     if (obj.rtId == idof<Object>()) {
 
