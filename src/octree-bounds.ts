@@ -1,20 +1,20 @@
 import { ActrOctreeLeaf } from "./octree-leaf";
-import { ActrPoint3 } from "./point";
+import { ActrPoint3L } from "./point";
 
 export class ActrOctreeBounds {
-    public readonly point: ActrPoint3;
+    public readonly point: ActrPoint3L;
     public size: i64;
 
     public constructor(x: i64, y: i64, z: i64, size: i64) {
-        this.point = new ActrPoint3(x, y, z);
+        this.point = new ActrPoint3L(x, y, z);
         this.size = size;
     }
 
-    public center(): ActrPoint3 {
-        return new ActrPoint3(
+    public center(): ActrPoint3L {
+        return new ActrPoint3L(
             this.point.x + this.size / 2,
             this.point.y + this.size / 2,
-            this.point.z + this.size / 2
+            this.point.z - this.size / 2
         );
     }
 

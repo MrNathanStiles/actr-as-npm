@@ -1,7 +1,6 @@
-import { ftoi } from "..";
+import { ActrPoint3F, FTOI, FTOL } from "..";
 import { ActrOctree } from "./octree";
 import { ActrOctreeLeaf } from "./octree-leaf";
-import { Vector3 } from "./three";
 import { actr_three_geometry_dispose, BoxGeometry } from "./three-geometry";
 import { actr_three_material_dispose, MeshStandardMaterial } from "./three-material";
 import { Mesh } from "./three-mesh";
@@ -21,9 +20,9 @@ export class Cube {
     
     public constructor(
         public readonly size: f32,
-        public readonly x: f32,
-        public readonly y: f32,
-        public readonly z: f32,
+        x: f32,
+        y: f32,
+        z: f32,
         public readonly color: i32,
         public readonly emissive: i32,
         public readonly transparent: bool,
@@ -35,7 +34,7 @@ export class Cube {
         this.geo = new BoxGeometry(size, size, size);
         this.mat = new  MeshStandardMaterial(color, emissive, transparent, opacity, wireframe, flatShading);
         this.mesh = new Mesh(this.geo, this.mat);
-        this.mesh.position = new Vector3(x, y, z);
+        this.mesh.position = new ActrPoint3F(x, y, z);
     }
     public dispose(): void {
         if (this.disposed) return;
@@ -62,11 +61,12 @@ export class Cube {
     }
 
     public addToTree(tree: ActrOctree): void {
-        const size = (i64)(Math.round(this.size));
+        const size = FTOI(this.size);
+        const position = this.mesh.position;
         const leaf = new ActrOctreeLeaf(
-            ftoi(this.x - this.size / 2),
-            ftoi(this.y - this.size / 2),
-            ftoi(this.z - this.size / 2),
+            FTOL(position.x - this.size / 2),
+            FTOL(position.y - this.size / 2),
+            FTOL(position.z - this.size / 2),
             size, size, size,
             this.mesh.identity
         );

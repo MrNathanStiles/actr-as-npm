@@ -1,4 +1,5 @@
-import { _actr_three_buffer, Euler, IdentityObject, Vector3 } from "./three";
+import { ActrPoint3F } from "./point";
+import { _actr_three_buffer, Euler, IdentityObject } from "./three";
 
 // @ts-ignore
 @external("env", "actr_three_object_id")
@@ -53,11 +54,11 @@ export class Object3D implements IdentityObject {
         return actr_three_object32_id(this.identity);
     }
 
-    private _position: Vector3 = new Vector3(0, 0, 0);
-    public get position(): Vector3 {
+    private _position: ActrPoint3F = new ActrPoint3F(0, 0, 0);
+    public get position(): ActrPoint3F {
         return this._position;
     }
-    public set position(value: Vector3) {
+    public set position(value: ActrPoint3F) {
         this._position = value;
         actr_three_object_position(this.identity, value.x, value.y, value.z);
         // todo notify
@@ -99,17 +100,17 @@ export class Object3D implements IdentityObject {
         actr_three_object_move_local(this.identity, x, y, z);
     }
 
-    public moveWorld(vector: Vector3): void {
+    public moveWorld(vector: ActrPoint3F): void {
         actr_three_object_move_world(this.identity, vector.x, vector.y, vector.z);
     }
 
-    public toLocal(vector: Vector3): Vector3 {
+    public toLocal(vector: ActrPoint3F): ActrPoint3F {
         actr_three_object_to_local(this.identity, vector.x, vector.y, vector.z);
-        return new Vector3(_actr_three_buffer[0], _actr_three_buffer[1], _actr_three_buffer[2]);
+        return new ActrPoint3F(_actr_three_buffer[0], _actr_three_buffer[1], _actr_three_buffer[2]);
     }
 
-    public toWorld(vector: Vector3): Vector3 {
+    public toWorld(vector: ActrPoint3F): ActrPoint3F {
         actr_three_object_to_world(this.identity, vector.x, vector.y, vector.z);
-        return new Vector3(_actr_three_buffer[0], _actr_three_buffer[1], _actr_three_buffer[2]);
+        return new ActrPoint3F(_actr_three_buffer[0], _actr_three_buffer[1], _actr_three_buffer[2]);
     }
 }

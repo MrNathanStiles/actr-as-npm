@@ -1,5 +1,5 @@
 import { actr_canvas2d_fill_rect, actr_canvas2d_fill_style_int, actr_canvas2d_stroke_rect, actr_canvas2d_stroke_style_int } from "./canvas";
-import { ActrPoint2 } from "./point";
+import { ActrPoint2I } from "./point";
 import { ActrQuadTreeLeaf } from "./quadtree";
 import { ActrUIControlContainer } from "./ui-control-container";
 import { actr_pack_bytes, actr_unpack_bytes, ActrUIState } from "./ui-state";
@@ -38,8 +38,8 @@ export class ActrUIControl {
         return this.uiState.isFocused(this);
     }
 
-    public get position(): ActrPoint2 {
-        const result = new ActrPoint2(
+    public get position(): ActrPoint2I {
+        const result = new ActrPoint2I(
             this.leaf!.bounds.point.x,
             this.leaf!.bounds.point.y
         );
@@ -94,7 +94,7 @@ export class ActrUIControl {
         const hovered = this.isHovered;
         this.drawBackground(position, this.isFocused, hovered);
     }
-    protected drawBackground(position: ActrPoint2, focused: bool, hovered: bool): void {
+    protected drawBackground(position: ActrPoint2I, focused: bool, hovered: bool): void {
 
         if (focused) actr_canvas2d_fill_style_int(this.backgroundColorFocused);
         else if (hovered) actr_canvas2d_fill_style_int(this.backgroundColorHovered);
@@ -105,7 +105,7 @@ export class ActrUIControl {
         actr_canvas2d_fill_rect((f32)(position.x), (f32)(position.y), (f32)(leaf.bounds.size.w), (f32)(leaf.bounds.size.h));
     }
 
-    protected drawBorder(position: ActrPoint2, focused: bool, hovered: bool): void {
+    protected drawBorder(position: ActrPoint2I, focused: bool, hovered: bool): void {
 
         if (focused) actr_canvas2d_stroke_style_int(this.borderColorFocused);
         else if (hovered) actr_canvas2d_stroke_style_int(this.borderColorHovered);

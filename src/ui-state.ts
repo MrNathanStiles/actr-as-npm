@@ -1,6 +1,6 @@
 import { actr_canvas2d_fill_rect, actr_canvas2d_fill_style } from "./canvas";
 import { ActrQuadTree, ActrQuadTreeBounds, ActrQuadTreeLeaf } from "./quadtree";
-import { ActrSize2 } from "./size";
+import { ActrSize2I } from "./size";
 import { ActrUIControl, ActrUIType } from "./ui-control";
 import { ActrUIControlButton } from "./ui-control-button";
 import { ActrUIControlContainer } from "./ui-control-container";
@@ -35,11 +35,11 @@ export class ActrUIState {
     private hovered: ActrUIControl | null = null;
     private focused: ActrUIControl | null = null;
     private valid: bool = false;
-    public canvasSize: ActrSize2;
+    public canvasSize: ActrSize2I;
 
     public constructor(w: i32, h: i32) {
         this.tree = new ActrQuadTree(false, 0, 0, 2048, null);
-        this.canvasSize = new ActrSize2(w, h);
+        this.canvasSize = new ActrSize2I(w, h);
     }
 
     public addButton(x: i32, y: i32, w: i32, h: i32, label: string): ActrUIControlButton {

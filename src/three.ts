@@ -17,38 +17,7 @@ export interface IdentityObject {
     readonly identity: i32;
 }
 
-export class Vector3 {
-    public constructor(
-        public x: f32,
-        public y: f32,
-        public z: f32,
-    ) { }
 
-    
-    public add(vector: Vector3): Vector3 {
-        return new Vector3(this.x + vector.x, this.y + vector.y, this.z + vector.z)
-    }
-
-    public addIn(vector: Vector3): void {
-        this.x += vector.x;
-        this.y += vector.y;
-        this.z += vector.z;
-    }
-
-    public subtract(vector: Vector3): Vector3 {
-        return new Vector3(this.x - vector.x, this.y - vector.y, this.z - vector.z)
-    }
-
-    public subtractFrom(vector: Vector3): void {
-        this.x -= vector.x;
-        this.y -= vector.y;
-        this.z -= vector.z;
-    }
-
-    public toString(): string {
-        return `Vector3:x:${this.x}:y:${this.y}:z:${this.z}`;
-    }
-}
 
 export class Euler {
     

@@ -13,7 +13,9 @@ export * from './src/perlin-noise';
 export * from './src/point';
 export * from './src/quadtree';
 export * from './src/size';
-export * from './src/surface-nets';
+export * from './src/surface-net-data';
+export * from './src/surface-net-generator';
+export * from './src/surface-net';
 export * from './src/three';
 export * from './src/three-camera';
 export * from './src/three-geometry';
@@ -29,11 +31,42 @@ export * from './src/ui-control-text';
 export * from './src/ui-control';
 export * from './src/ui-state';
 
-export function ftoi(value: f64): i64 {
-    if (value < 0) return (i64)(value - 1);
-    if (value > 0) return (i64)(value + 1);
-    return 0;
+export function DTOL(value: f64): i64 {
+    return (i64)(Math.round(value));
 }
+
+export function DTOF(value: f64): f32 {
+    return (f32)(value);
+}
+
+export function FTOL(value: f32): i64 {
+    return (i64)(Math.round(value));
+}
+
+export function FTOI(value: f32): i32 {
+    return (i32)(Math.round(value));
+}
+
+export function FTOD(value: f32): f64 {
+    return (f64)(value);
+}
+
+export function ITOD(value: i32): f64 {
+    return (f64)(value);
+}
+
+export function ITOL(value: i32): i64 {
+    return (i64)(value);
+}
+
+export function ITOF(value: i32): f32 {
+    return (f32)(value);
+}
+
+export function LTOF(value: i64): f32 {
+    return (f32)(value);
+}
+
 
 // @ts-ignore
 @external("env", "actr_debugger")

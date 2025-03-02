@@ -2,8 +2,8 @@ import { Cube } from "./cube";
 import { actr_log } from "./log";
 import { ActrOctreeBounds } from "./octree-bounds";
 import { ActrOctreeLeaf } from "./octree-leaf";
-import { SurfaceNet } from "./surface-nets";
-import { Vector3 } from "./three";
+import { ActrPoint3F } from "./point";
+import { SurfaceNet } from "./surface-net";
 import { Scene } from "./three-scene";
 
 const LIST_MAX: i32 = 2;
@@ -51,6 +51,14 @@ export class ActrOctree {
                 false
             );
             this.cube!.addToScene(this.scene)
+        }
+
+        for (let i = 0; i < this.stuck.length; i++) {
+            this.stuck[i].visualize(this.scene);
+        }
+
+        for (let i = 0; i < this.items.length; i++) {
+            this.items[i].visualize(this.scene);
         }
     }
 
@@ -370,19 +378,19 @@ export class ActrOctree {
             const i2 = surfaceNet.indices[i + 2];
             
             
-            const v0 = new Vector3(
+            const v0 = new ActrPoint3F(
                 surfaceNet.vertices[i0],
                 surfaceNet.vertices[i0 + 1],
                 surfaceNet.vertices[i0 + 2],
             );
 
-            const v1 = new Vector3(
+            const v1 = new ActrPoint3F(
                 surfaceNet.vertices[i0],
                 surfaceNet.vertices[i0 + 1],
                 surfaceNet.vertices[i0 + 2],
             );
 
-            const v2 = new Vector3(
+            const v2 = new ActrPoint3F(
                 surfaceNet.vertices[i0],
                 surfaceNet.vertices[i0 + 1],
                 surfaceNet.vertices[i0 + 2],
@@ -404,8 +412,10 @@ export class ActrOctree {
         }
         this.items.push(newLeaf);
         newLeaf.parent = this;
+        
 
         if (this.items.length < LIST_MAX) {
+            this.visualize();
             return;
         }
         while (this.items.length > 0) {
@@ -422,5 +432,6 @@ export class ActrOctree {
 
         }
         this.items.length = 0;
+        this.visualize();
     }
 }
