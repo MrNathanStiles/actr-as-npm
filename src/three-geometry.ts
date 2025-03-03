@@ -9,6 +9,10 @@ export declare function actr_three_geometry_dispose(identity: i32): void;
 export declare function actr_three_geometry_box(width: f32, height: f32, depth: f32): i32;
 
 // @ts-ignore
+@external("env", "actr_three_geometry_sphere")
+export declare function actr_three_geometry_sphere(radius: f32, width: i32, height: i32): i32;
+
+// @ts-ignore
 @external("env", "actr_three_geometry_buffer")
 export declare function actr_three_geometry_buffer(indexCount: i32, indices: StaticArray<u32>, vertexCount: i32, vertices: StaticArray<f32>): i32;
 
@@ -46,5 +50,16 @@ export class BoxGeometry extends BufferGeometry {
         public readonly depth: f32,
     ) {
         super(actr_three_geometry_box(width, height, depth), 0, null, 0, null);
+    }
+}
+
+export class SphereGeometry extends BufferGeometry {
+
+    public constructor(
+        public readonly radius: f32,
+        public readonly width: i32,
+        public readonly height: i32,
+    ) {
+        super(actr_three_geometry_sphere(radius, width, height), 0, null, 0, null);
     }
 }

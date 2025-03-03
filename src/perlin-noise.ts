@@ -1,7 +1,7 @@
 //This code is from Kas Thomas' blog:
 //  http://asserttrue.blogspot.de/2011/12/perlin-noise-in-javascript_31.html
 
-import { actr_log, DTOI } from "..";
+import { actr_log } from "..";
 
 // This is a port of Ken Perlin's Java code. The
 // original Java code is at http://cs.nyu.edu/%7Eperlin/noise/.
@@ -47,7 +47,7 @@ export class PerlinNoise {
     public constructor(shuffle?: bool) {
         const set = new Set<u8>();
 
-        actr_log('permutations');
+        actr_log(`permutations ${this.permutation.length}`);
         for (let i = 0; i < this.permutation.length; i++) {
             if (set.has(this.permutation[i])) {
                 actr_log(`duplicate ${this.permutation[i]}`);
@@ -68,7 +68,7 @@ export class PerlinNoise {
 
     public shuffle(): void {
         // this.permutation.sort((a, b) => (i32)(1000 * (Math.random() - 0.5)));
-        this.permutation.sort(() => DTOI(Math.random() * 2 - 1));
+        this.permutation.sort(() => (i32)(Math.random() * 2000 - 1000));
         this.initPerlinNoise();
     }
     

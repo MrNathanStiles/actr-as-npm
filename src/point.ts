@@ -82,6 +82,10 @@ export class ActrPoint3<T extends number> {
         return new ActrPoint3<T>(this.x * scalar as T, this.y * scalar as T, this.z * scalar as T);
     }
 
+    public divide(scalar: f64): ActrPoint3<T> {
+        return new ActrPoint3<T>(this.x / scalar as T, this.y / scalar as T, this.z / scalar as T);
+    }
+
     public dot(point: ActrPoint3<T>): T {
         return this.x * point.x + this.y * point.y + this.z * point.z as T;
     }

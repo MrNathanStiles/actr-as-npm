@@ -1,9 +1,7 @@
 import { Cube } from "./cube";
-import { actr_log } from "./log";
 import { ActrOctreeBounds } from "./octree-bounds";
 import { ActrOctreeLeaf } from "./octree-leaf";
 import { ActrPoint3 } from "./point";
-import { SurfaceNet } from "./surface-net";
 import { Scene } from "./three-scene";
 
 const LIST_MAX: i32 = 2;
@@ -88,7 +86,7 @@ export class ActrOctree {
             // 4 5
             // 7 6
             // 0 becomes 6 in new 0
-            newTree = new ActrOctree(false, this.bounds.point.addXYZ(-halfSize, -halfSize,  halfSize), size, this, this.scene);
+            newTree = new ActrOctree(false, this.bounds.point.addXYZ(-halfSize, -halfSize, halfSize), size, this, this.scene);
             branch.parent = newTree;
             newTree.branch[6] = branch;
             this.branch[0] = newTree;
@@ -112,7 +110,7 @@ export class ActrOctree {
             // 4 5
             // 7 6
             // 2 becomes 4 in new 2
-            newTree = new ActrOctree(false, 
+            newTree = new ActrOctree(false,
                 this.bounds.point.addXYZ(halfSize, -halfSize, - halfSize), size, this, this.scene);
             branch.parent = newTree;
             newTree.branch[4] = branch;
@@ -125,7 +123,7 @@ export class ActrOctree {
             // 4 5
             // 7 6
             // 3 becomes 5 in new 3
-            newTree = new ActrOctree(false, this.bounds.point.addXYZ(-halfSize, -halfSize, -halfSize),size, this, this.scene);
+            newTree = new ActrOctree(false, this.bounds.point.addXYZ(-halfSize, -halfSize, -halfSize), size, this, this.scene);
             branch.parent = newTree;
             newTree.branch[5] = branch;
             this.branch[3] = newTree;
@@ -138,7 +136,7 @@ export class ActrOctree {
             // 4 5
             // 7 6
             // 4 becomes 2 in new 4
-            newTree = new ActrOctree(false, 
+            newTree = new ActrOctree(false,
                 this.bounds.point.addXYZ(-halfSize, halfSize, halfSize), size, this, this.scene);
             branch.parent = newTree;
             newTree.branch[2] = branch;
@@ -151,7 +149,7 @@ export class ActrOctree {
             // 4 5
             // 7 6
             // 5 becomes 3 in new 5
-            newTree = new ActrOctree(false, 
+            newTree = new ActrOctree(false,
                 this.bounds.point.addXYZ(halfSize, halfSize, halfSize), size, this, this.scene);
             branch.parent = newTree;
             newTree.branch[3] = branch;
@@ -164,7 +162,7 @@ export class ActrOctree {
             // 4 5
             // 7 6
             // 6 becomes 0 in new 6
-            newTree = new ActrOctree(false, 
+            newTree = new ActrOctree(false,
                 this.bounds.point.addXYZ(halfSize, halfSize, -halfSize), size, this, this.scene);
             branch.parent = newTree;
             newTree.branch[0] = branch;
@@ -177,7 +175,7 @@ export class ActrOctree {
             // 4 5
             // 7 6
             // 7 becomes 1 in new 7
-            newTree = new ActrOctree(false, 
+            newTree = new ActrOctree(false,
                 this.bounds.point.addXYZ(-halfSize, halfSize, -halfSize), size, this, this.scene);
             branch.parent = newTree;
             newTree.branch[1] = branch;
@@ -246,6 +244,23 @@ export class ActrOctree {
         return -1;
     }
 
+    private dump(results: ActrOctreeLeaf[]): void {
+        const list: ActrOctree[] = [this];
+        while (list.length) {
+            const tree = list.pop();
+            for (let i = 0; i < tree.stuck.length; i++) {
+                results.push(tree.stuck[i]);
+            }
+            for (let i = 0; i < tree.items.length; i++) {
+                results.push(tree.items[i]);
+            }
+            for (let i = 0; i < 8; i++) {
+                const branch = tree.branch[i];
+                if (branch == null) continue;
+                list.push(branch);
+            }
+        }
+    }
     public query(area: ActrOctreeBounds): ActrOctreeLeaf[] {
         const list: ActrOctree[] = [];
         const results: ActrOctreeLeaf[] = [];
@@ -259,9 +274,14 @@ export class ActrOctree {
             for (let i = 0; i < 8; i++) {
                 const branch = tree.branch[i];
                 if (!branch) continue;
-                if (area.intersects(branch.bounds)) {
-                    list.push(branch);
+                if (area.contains(branch.bounds)) {
+                    branch.dump(results);
+                } else {
+                    if (area.intersects(branch.bounds)) {
+                        list.push(branch);                    
+                    }
                 }
+                
             }
 
             for (let i = 0; i < tree.items.length; i++) {
@@ -318,10 +338,10 @@ export class ActrOctree {
     private generateBranch(index: i32): void {
         if (this.branch[index] != null) return;
 
-const size = this.bounds.size / 2;
-let x = this.bounds.point.x;
-let y = this.bounds.point.y;
-let z = this.bounds.point.z;
+        const size = this.bounds.size / 2;
+        let x = this.bounds.point.x;
+        let y = this.bounds.point.y;
+        let z = this.bounds.point.z;
 
         // 0 1
         // 3 2

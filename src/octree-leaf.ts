@@ -1,4 +1,4 @@
-import { ActrPoint3, DTOF } from "..";
+import { ActrPoint3, TOF } from "..";
 import { Cube } from "./cube";
 import { ActrOctree } from "./octree";
 import { Scene } from "./three-scene";
@@ -27,7 +27,7 @@ export class ActrOctreeLeaf {
         const size = this.size.getMax();
         this.cube = new Cube(
             this.center().to<f32>(),
-            DTOF(size),
+            TOF(size),
             stuck ? 0x888888 : 0x00ffff,
             stuck ? 0x888888 : 0x00ffff,
             true,

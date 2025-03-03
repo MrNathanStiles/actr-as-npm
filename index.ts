@@ -31,46 +31,21 @@ export * from './src/ui-control-text';
 export * from './src/ui-control';
 export * from './src/ui-state';
 
-export function DTOI(value: f64): i32 {
+export function TOI(value: f64): i32 {
     return (i32)(value);
 }
 
-export function DTOL(value: f64): i64 {
+export function TOL<T>(value: T): i64 {
     return (i64)(value);
 }
 
-export function DTOF(value: f64): f32 {
+export function TOF<T>(value: T): f32 {
     return (f32)(value);
 }
 
-export function FTOL(value: f32): i64 {
-    return (i64)(value);
-}
-
-export function FTOI(value: f32): i32 {
-    return (i32)(value);
-}
-
-export function FTOD(value: f32): f64 {
+export function TOD<T>(value: T): f64 {
     return (f64)(value);
 }
-
-export function ITOD(value: i32): f64 {
-    return (f64)(value);
-}
-
-export function ITOL(value: i32): i64 {
-    return (i64)(value);
-}
-
-export function ITOF(value: i32): f32 {
-    return (f32)(value);
-}
-
-export function LTOF(value: i64): f32 {
-    return (f32)(value);
-}
-
 
 // @ts-ignore
 @external("env", "actr_debugger")
