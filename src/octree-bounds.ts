@@ -1,42 +1,44 @@
 import { ActrOctreeLeaf } from "./octree-leaf";
-import { ActrPoint3L } from "./point";
+import { ActrPoint3 } from "./point";
 
 export class ActrOctreeBounds {
-    public readonly point: ActrPoint3L;
+    
     public size: i64;
 
-    public constructor(x: i64, y: i64, z: i64, size: i64) {
-        this.point = new ActrPoint3L(x, y, z);
+    public constructor(
+        public point: ActrPoint3<i64>,
+        size: i64
+    ) {
         this.size = size;
     }
 
-    public center(): ActrPoint3L {
-        return new ActrPoint3L(
+    public center(): ActrPoint3<i64> {
+        return new ActrPoint3<i64>(
             this.point.x + this.size / 2,
             this.point.y + this.size / 2,
-            this.point.z - this.size / 2
+            this.point.z + this.size / 2
         );
     }
 
     public intersectsLeaf(leaf: ActrOctreeLeaf): bool {
-        if (this.point.x >= leaf.point.x + leaf.size.w) {
+        if (this.point.x >= leaf.position.x + leaf.size.x) {
             return false;
         }
-        if (leaf.point.x >= this.point.x + this.size) {
-            return false;
-        }
-
-        if (this.point.y >= leaf.point.y + leaf.size.h) {
-            return false;
-        }
-        if (leaf.point.y >= this.point.y + this.size) {
+        if (leaf.position.x >= this.point.x + this.size) {
             return false;
         }
 
-        if (this.point.z <= leaf.point.z - leaf.size.d) {
+        if (this.point.y >= leaf.position.y + leaf.size.y) {
             return false;
         }
-        if (leaf.point.z <= this.point.z - this.size) {
+        if (leaf.position.y >= this.point.y + this.size) {
+            return false;
+        }
+
+        if (this.point.z >= leaf.position.z + leaf.size.z) {
+            return false;
+        }
+        if (leaf.position.z >= this.point.z + this.size) {
             return false;
         }
 
@@ -63,10 +65,10 @@ export class ActrOctreeBounds {
             return false;
         }
 
-        if (this.point.z <= other.point.z - other.size) {
+        if (this.point.z >= other.point.z + other.size) {
             return false;
         }
-        if (other.point.z <= this.point.z - this.size) {
+        if (other.point.z >= this.point.z + this.size) {
             return false;
         }
 
@@ -79,8 +81,8 @@ export class ActrOctreeBounds {
             this.point.x + this.size >= other.point.x + other.size &&
             this.point.y <= other.point.y &&
             this.point.y + this.size >= other.point.y + other.size &&
-            this.point.z >= other.point.z &&
-            this.point.z - this.size <= other.point.z - other.size
+            this.point.z <= other.point.z &&
+            this.point.z + this.size >= other.point.z + other.size
         ) {
             result = true;
         }
@@ -91,12 +93,12 @@ export class ActrOctreeBounds {
         let result: bool = false;
 
         if (
-            this.point.x <= leaf.point.x &&
-            this.point.x + this.size >= leaf.point.x + leaf.size.w &&
-            this.point.y <= leaf.point.y &&
-            this.point.y + this.size >= leaf.point.y + leaf.size.h &&
-            this.point.z >= leaf.point.z &&
-            this.point.z - this.size <= leaf.point.z - leaf.size.d
+            this.point.x <= leaf.position.x &&
+            this.point.x + this.size >= leaf.position.x + leaf.size.x &&
+            this.point.y <= leaf.position.y &&
+            this.point.y + this.size >= leaf.position.y + leaf.size.y &&
+            this.point.z <= leaf.position.z &&
+            this.point.z + this.size >= leaf.position.z + leaf.size.z
         ) {
             result = true;
         }

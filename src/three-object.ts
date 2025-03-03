@@ -1,4 +1,4 @@
-import { ActrPoint3F } from "./point";
+import { ActrPoint3 } from "./point";
 import { _actr_three_buffer, Euler, IdentityObject } from "./three";
 
 // @ts-ignore
@@ -54,13 +54,13 @@ export class Object3D implements IdentityObject {
         return actr_three_object32_id(this.identity);
     }
 
-    private _position: ActrPoint3F = new ActrPoint3F(0, 0, 0);
-    public get position(): ActrPoint3F {
+    private _position: ActrPoint3<f32> = new ActrPoint3<f32>(0, 0, 0);
+    public get position(): ActrPoint3<f32> {
         return this._position;
     }
-    public set position(value: ActrPoint3F) {
+    public set position(value: ActrPoint3<f32>) {
         this._position = value;
-        actr_three_object_position(this.identity, value.x, value.y, value.z);
+        actr_three_object_position(this.identity, value.x, value.y, -value.z);
         // todo notify
     }
 
@@ -70,22 +70,18 @@ export class Object3D implements IdentityObject {
     }
     public set rotation(value: Euler) {
         this._rotation = value;
-        actr_three_object_rotation(this.identity, value.x, value.y, value.z);
+        actr_three_object_rotation(this.identity, value.x, value.y, -value.z);
         // todo notify
     }
 
-    public constructor(
-        public readonly identity: i32,
-    ) {
-
-    }
+    public constructor(public readonly identity: i32) { }
 
     public add(object: Object3D): void {
         actr_three_object_add(this.identity, object.identity);
     }
 
     public lookAt(x: f32, y: f32, z: f32): void {
-        actr_three_object_lookat(this.identity, x, y, z);
+        actr_three_object_lookat(this.identity, x, y, -z);
     }
 
     public remove(object: Object3D): void {
@@ -93,24 +89,24 @@ export class Object3D implements IdentityObject {
     }
 
     public rotate(x: f32, y: f32, z: f32): void {
-        actr_three_object_rotate(this.identity, x, y, z);
+        actr_three_object_rotate(this.identity, x, y, -z);
     }
 
     public moveLocal(x: f32, y: f32, z: f32): void {
-        actr_three_object_move_local(this.identity, x, y, z);
+        actr_three_object_move_local(this.identity, x, y, -z);
     }
 
-    public moveWorld(vector: ActrPoint3F): void {
-        actr_three_object_move_world(this.identity, vector.x, vector.y, vector.z);
+    public moveWorld(vector: ActrPoint3<f32>): void {
+        actr_three_object_move_world(this.identity, vector.x, vector.y, -vector.z);
     }
 
-    public toLocal(vector: ActrPoint3F): ActrPoint3F {
-        actr_three_object_to_local(this.identity, vector.x, vector.y, vector.z);
-        return new ActrPoint3F(_actr_three_buffer[0], _actr_three_buffer[1], _actr_three_buffer[2]);
+    public toLocal(vector: ActrPoint3<f32>): ActrPoint3<f32> {
+        actr_three_object_to_local(this.identity, vector.x, vector.y, -vector.z);
+        return new ActrPoint3<f32>(_actr_three_buffer[0], _actr_three_buffer[1], -_actr_three_buffer[2]);
     }
 
-    public toWorld(vector: ActrPoint3F): ActrPoint3F {
-        actr_three_object_to_world(this.identity, vector.x, vector.y, vector.z);
-        return new ActrPoint3F(_actr_three_buffer[0], _actr_three_buffer[1], _actr_three_buffer[2]);
+    public toWorld(vector: ActrPoint3<f32>): ActrPoint3<f32> {
+        actr_three_object_to_world(this.identity, vector.x, vector.y, -vector.z);
+        return new ActrPoint3<f32>(_actr_three_buffer[0], _actr_three_buffer[1], -_actr_three_buffer[2]);
     }
 }

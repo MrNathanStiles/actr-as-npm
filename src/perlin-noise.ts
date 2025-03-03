@@ -1,7 +1,7 @@
 //This code is from Kas Thomas' blog:
 //  http://asserttrue.blogspot.de/2011/12/perlin-noise-in-javascript_31.html
 
-import { DTOI } from "..";
+import { actr_log, DTOI } from "..";
 
 // This is a port of Ken Perlin's Java code. The
 // original Java code is at http://cs.nyu.edu/%7Eperlin/noise/.
@@ -29,7 +29,7 @@ function scale(n: f32): f32 {
 
 export class PerlinNoise {
     private readonly p: StaticArray<u8> = new StaticArray<u8>(512);
-    private readonly permutation: Array<u8> = [151, 160, 137, 91, 90, 15,
+    private readonly permutation: StaticArray<u8> = StaticArray.fromArray<u8>([151, 160, 137, 91, 90, 15,
         131, 13, 201, 95, 96, 53, 194, 233, 7, 225, 140, 36, 103, 30, 69, 142, 8, 99, 37, 240, 21, 10, 23,
         190, 6, 148, 247, 120, 234, 75, 0, 26, 197, 62, 94, 252, 219, 203, 117, 35, 11, 32, 57, 177, 33,
         88, 237, 149, 56, 87, 174, 20, 125, 136, 171, 168, 68, 175, 74, 165, 71, 134, 139, 48, 27, 166,
@@ -42,9 +42,20 @@ export class PerlinNoise {
         251, 34, 242, 193, 238, 210, 144, 12, 191, 179, 162, 241, 81, 51, 145, 235, 249, 14, 239, 107,
         49, 192, 214, 31, 181, 199, 106, 157, 184, 84, 204, 176, 115, 121, 50, 45, 127, 4, 150, 254,
         138, 236, 205, 93, 222, 114, 67, 29, 24, 72, 243, 141, 128, 195, 78, 66, 215, 61, 156, 180
-    ];
+    ]);
 
     public constructor(shuffle?: bool) {
+        const set = new Set<u8>();
+
+        actr_log('permutations');
+        for (let i = 0; i < this.permutation.length; i++) {
+            if (set.has(this.permutation[i])) {
+                actr_log(`duplicate ${this.permutation[i]}`);
+            } else {
+                set.add(this.permutation[i]);
+            }
+        }
+        actr_log('permutations done');
         if (shuffle) this.shuffle();
         else this.initPerlinNoise();
     }

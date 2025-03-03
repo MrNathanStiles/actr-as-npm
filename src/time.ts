@@ -10,3 +10,7 @@ export declare function actr_time_string(): string;
 // @ts-ignore
 @external("env", "actr_time")
 export declare function actr_time(): i64;
+
+// @ts-ignore
+@external("env", "actr_performance")
+export declare function actr_performance(): f32;

@@ -1,5 +1,5 @@
-import { ActrPoint3F } from "./point";
-import { ActrSize3F, ActrSize3I } from "./size";
+import { actr_log } from "./log";
+import { ActrPoint3 } from "./point";
 import { BufferGeometry } from "./three-geometry";
 import { MeshStandardMaterial } from "./three-material";
 import { Mesh } from "./three-mesh";
@@ -12,11 +12,11 @@ export class SurfaceNet {
     private scene: Scene | null = null;
     private disposed: bool = false;
 
-    public get position(): ActrPoint3F {
+    public get position(): ActrPoint3<f32> {
         return this.mesh.position;
     }
 
-    public set position(value: ActrPoint3F) {
+    public set position(value: ActrPoint3<f32>) {
         this.mesh.position = value;
     }
 
@@ -27,7 +27,7 @@ export class SurfaceNet {
     public constructor(
         public readonly vertices: StaticArray<f32>,
         public readonly indices: StaticArray<u32>,
-        public readonly size: ActrSize3F,
+        public readonly size: ActrPoint3<f32>,
     ) {
         const geometry = new BufferGeometry(0, indices.length, indices, vertices.length, vertices);
         const material = new MeshStandardMaterial(0xffffff, 0x000000, false, 0, false, true);

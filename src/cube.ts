@@ -1,4 +1,4 @@
-import { ActrPoint3F, FTOI, FTOL } from "..";
+import { ActrPoint3 } from "..";
 import { ActrOctree } from "./octree";
 import { ActrOctreeLeaf } from "./octree-leaf";
 import { actr_three_geometry_dispose, BoxGeometry } from "./three-geometry";
@@ -14,15 +14,14 @@ export class Cube {
     private scene: Scene | null = null;
     private disposed: bool = false;
 
-    public static makeSimple(size: f32, x: f32, y: f32, z: f32, color: i32): Cube {
-        return new Cube(size, x, y, z, color, color, true, 0.5, false, true);
+    public static makeSimple(position: ActrPoint3<f32>, size: f32, color: i32): Cube {
+        return new Cube(position, size, color, color, true, 0.5, false, true);
     }
     
     public constructor(
+        position: ActrPoint3<f32>,
         public readonly size: f32,
-        x: f32,
-        y: f32,
-        z: f32,
+        
         public readonly color: i32,
         public readonly emissive: i32,
         public readonly transparent: bool,
@@ -30,12 +29,12 @@ export class Cube {
         public readonly wireframe: bool,
         public readonly flatShading: bool,
     ) {
-
         this.geo = new BoxGeometry(size, size, size);
         this.mat = new  MeshStandardMaterial(color, emissive, transparent, opacity, wireframe, flatShading);
         this.mesh = new Mesh(this.geo, this.mat);
-        this.mesh.position = new ActrPoint3F(x, y, z);
+        this.mesh.position = position;
     }
+    
     public dispose(): void {
         if (this.disposed) return;
         if (this.scene) {
@@ -61,18 +60,14 @@ export class Cube {
     }
 
     public addToTree(tree: ActrOctree): void {
-        const sizef = Mathf.ceil(this.size);
-        const size = FTOI(sizef) + 1;
-        const position = this.mesh.position;
         const leaf = new ActrOctreeLeaf(
-            FTOL(Mathf.floor(position.x - sizef * 0.5)),
-            FTOL(Mathf.floor(position.y - sizef * 0.5)),
-            FTOL(Mathf.ceil(position.z + sizef * 0.5)),
-            size, size, size,
+            this.mesh.position.addN(Mathf.ceil(this.size * 0.5)).to<i64>(),
+            ActrPoint3.splat((this.size + 1) as i32),
             this.mesh.identity
         );
         tree.insert(leaf);
         
         
     }
+
 }

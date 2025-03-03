@@ -2,7 +2,7 @@ import { Cube } from "./cube";
 import { actr_log } from "./log";
 import { ActrOctreeBounds } from "./octree-bounds";
 import { ActrOctreeLeaf } from "./octree-leaf";
-import { ActrPoint3F } from "./point";
+import { ActrPoint3 } from "./point";
 import { SurfaceNet } from "./surface-net";
 import { Scene } from "./three-scene";
 
@@ -18,14 +18,12 @@ export class ActrOctree {
     private cube: Cube | null = null;
     public constructor(
         private readonly root: bool,
-        x: i64,
-        y: i64,
-        z: i64,
+        position: ActrPoint3<i64>,
         size: i64,
         private parent: ActrOctree | null,
         public readonly scene: Scene | null
     ) {
-        this.bounds = new ActrOctreeBounds(x, y, z, size);
+        this.bounds = new ActrOctreeBounds(position, size);
         this.visualize();
     }
 
@@ -49,10 +47,8 @@ export class ActrOctree {
             this.cube!.dispose();
         }
         this.cube = new Cube(
+            this.bounds.point.addN(this.bounds.size / 2).to<f32>(),
             (f32)(this.bounds.size),
-            (f32)(this.bounds.point.x + this.bounds.size / 2),
-            (f32)(this.bounds.point.y + this.bounds.size / 2),
-            (f32)(this.bounds.point.z - this.bounds.size / 2),
             0x00ff00,
             0x00ff00,
             true,
@@ -92,7 +88,7 @@ export class ActrOctree {
             // 4 5
             // 7 6
             // 0 becomes 6 in new 0
-            newTree = new ActrOctree(false, this.bounds.point.x - halfSize, this.bounds.point.y - halfSize, this.bounds.point.z - halfSize, size, this, this.scene);
+            newTree = new ActrOctree(false, this.bounds.point.addXYZ(-halfSize, -halfSize,  halfSize), size, this, this.scene);
             branch.parent = newTree;
             newTree.branch[6] = branch;
             this.branch[0] = newTree;
@@ -104,7 +100,7 @@ export class ActrOctree {
             // 4 5
             // 7 6
             // 1 becomes 7 in new 1
-            newTree = new ActrOctree(false, this.bounds.point.x + halfSize, this.bounds.point.y - halfSize, this.bounds.point.z - halfSize, size, this, this.scene);
+            newTree = new ActrOctree(false, this.bounds.point.addXYZ(halfSize, -halfSize, halfSize), size, this, this.scene);
             branch.parent = newTree;
             newTree.branch[7] = branch;
             this.branch[1] = newTree;
@@ -116,7 +112,8 @@ export class ActrOctree {
             // 4 5
             // 7 6
             // 2 becomes 4 in new 2
-            newTree = new ActrOctree(false, this.bounds.point.x + halfSize, this.bounds.point.y - halfSize, this.bounds.point.z + halfSize, size, this, this.scene);
+            newTree = new ActrOctree(false, 
+                this.bounds.point.addXYZ(halfSize, -halfSize, - halfSize), size, this, this.scene);
             branch.parent = newTree;
             newTree.branch[4] = branch;
             this.branch[2] = newTree;
@@ -128,7 +125,7 @@ export class ActrOctree {
             // 4 5
             // 7 6
             // 3 becomes 5 in new 3
-            newTree = new ActrOctree(false, this.bounds.point.x - halfSize, this.bounds.point.y - halfSize, this.bounds.point.z + halfSize, size, this, this.scene);
+            newTree = new ActrOctree(false, this.bounds.point.addXYZ(-halfSize, -halfSize, -halfSize),size, this, this.scene);
             branch.parent = newTree;
             newTree.branch[5] = branch;
             this.branch[3] = newTree;
@@ -141,7 +138,8 @@ export class ActrOctree {
             // 4 5
             // 7 6
             // 4 becomes 2 in new 4
-            newTree = new ActrOctree(false, this.bounds.point.x - halfSize, this.bounds.point.y + halfSize, this.bounds.point.z - halfSize, size, this, this.scene);
+            newTree = new ActrOctree(false, 
+                this.bounds.point.addXYZ(-halfSize, halfSize, halfSize), size, this, this.scene);
             branch.parent = newTree;
             newTree.branch[2] = branch;
             this.branch[4] = newTree;
@@ -153,7 +151,8 @@ export class ActrOctree {
             // 4 5
             // 7 6
             // 5 becomes 3 in new 5
-            newTree = new ActrOctree(false, this.bounds.point.x + halfSize, this.bounds.point.y + halfSize, this.bounds.point.z - halfSize, size, this, this.scene);
+            newTree = new ActrOctree(false, 
+                this.bounds.point.addXYZ(halfSize, halfSize, halfSize), size, this, this.scene);
             branch.parent = newTree;
             newTree.branch[3] = branch;
             this.branch[5] = newTree;
@@ -165,7 +164,8 @@ export class ActrOctree {
             // 4 5
             // 7 6
             // 6 becomes 0 in new 6
-            newTree = new ActrOctree(false, this.bounds.point.x + halfSize, this.bounds.point.y + halfSize, this.bounds.point.z + halfSize, size, this, this.scene);
+            newTree = new ActrOctree(false, 
+                this.bounds.point.addXYZ(halfSize, halfSize, -halfSize), size, this, this.scene);
             branch.parent = newTree;
             newTree.branch[0] = branch;
             this.branch[6] = newTree;
@@ -177,30 +177,29 @@ export class ActrOctree {
             // 4 5
             // 7 6
             // 7 becomes 1 in new 7
-            newTree = new ActrOctree(false, this.bounds.point.x - halfSize, this.bounds.point.y + halfSize, this.bounds.point.z + halfSize, size, this, this.scene);
+            newTree = new ActrOctree(false, 
+                this.bounds.point.addXYZ(-halfSize, halfSize, -halfSize), size, this, this.scene);
             branch.parent = newTree;
             newTree.branch[1] = branch;
             this.branch[7] = newTree;
         }
 
-        this.bounds.point.x -= halfSize;
-        this.bounds.point.y -= halfSize;
-        this.bounds.point.z += halfSize;
+        this.bounds.point = this.bounds.point.addN(-halfSize);
         this.bounds.size += size;
         this.visualize();
     }
 
     private leftHalf(bounds: ActrOctreeLeaf, xmid: i64): bool {
-        return bounds.point.x + bounds.size.w <= xmid;
+        return bounds.position.x + bounds.size.x <= xmid;
     }
     private rightHalf(bounds: ActrOctreeLeaf, xmid: i64): bool {
-        return bounds.point.x >= xmid;
+        return bounds.position.x >= xmid;
     }
     private frontHalf(bounds: ActrOctreeLeaf, zmid: i64): bool {
-        return bounds.point.z <= zmid;
+        return bounds.position.z >= zmid;
     }
     private backHalf(bounds: ActrOctreeLeaf, zmid: i64): bool {
-        return bounds.point.z - bounds.size.h >= zmid;
+        return bounds.position.z - bounds.size.y <= zmid;
     }
 
     private index(bounds: ActrOctreeLeaf): i32 {
@@ -210,9 +209,9 @@ export class ActrOctree {
         // 7 6
         const xmid: i64 = this.bounds.point.x + (this.bounds.size / 2);
         const ymid: i64 = this.bounds.point.y + (this.bounds.size / 2);
-        const zmid: i64 = this.bounds.point.z - (this.bounds.size / 2);
+        const zmid: i64 = this.bounds.point.z + (this.bounds.size / 2);
 
-        if (bounds.point.y + bounds.size.h <= ymid) {
+        if (bounds.position.y + bounds.size.y <= ymid) {
             // bottom half
             if (this.leftHalf(bounds, xmid)) {
                 if (this.frontHalf(bounds, zmid)) {
@@ -228,7 +227,7 @@ export class ActrOctree {
                 }
             }
         }
-        else if (bounds.point.y >= ymid) {
+        else if (bounds.position.y >= ymid) {
             // top half
             if (this.leftHalf(bounds, xmid)) {
                 if (this.frontHalf(bounds, zmid)) {
@@ -319,10 +318,10 @@ export class ActrOctree {
     private generateBranch(index: i32): void {
         if (this.branch[index] != null) return;
 
-        const size = this.bounds.size / 2;
-        let x = this.bounds.point.x;
-        let y = this.bounds.point.y;
-        let z = this.bounds.point.z;
+const size = this.bounds.size / 2;
+let x = this.bounds.point.x;
+let y = this.bounds.point.y;
+let z = this.bounds.point.z;
 
         // 0 1
         // 3 2
@@ -330,19 +329,19 @@ export class ActrOctree {
         // 7 6
 
         if (0 == index) {
-            z -= size;
+            z += size;
         } else if (1 == index) {
             x += size;
-            z -= size;
+            z += size;
         } else if (2 == index) {
             x += size;
         } else if (4 == index) {
             y += size;
-            z -= size;
+            z += size;
         } else if (5 == index) {
             x += size;
             y += size;
-            z -= size;
+            z += size;
         } else if (6 == index) {
             x += size;
             y += size;
@@ -350,42 +349,7 @@ export class ActrOctree {
             y += size;
         }
 
-        this.branch[index] = new ActrOctree(false, x, y, z, size, this, this.scene);
-    }
-
-    public insertSurfaceNet(surfaceNet: SurfaceNet): void {
-        for (let i = 0; i < surfaceNet.indices.length; i += 3) {
-            // each index is a pointer to the first of 3 floats that make up a vertex
-            // take 3  indices and get 9 floats for three points of a triangle
-            const i0 = surfaceNet.indices[i];
-            const i1 = surfaceNet.indices[i + 1];
-            const i2 = surfaceNet.indices[i + 2];
-
-
-            const v0 = new ActrPoint3F(
-                surfaceNet.vertices[i0],
-                surfaceNet.vertices[i0 + 1],
-                surfaceNet.vertices[i0 + 2],
-            );
-
-            const v1 = new ActrPoint3F(
-                surfaceNet.vertices[i0],
-                surfaceNet.vertices[i0 + 1],
-                surfaceNet.vertices[i0 + 2],
-            );
-
-            const v2 = new ActrPoint3F(
-                surfaceNet.vertices[i0],
-                surfaceNet.vertices[i0 + 1],
-                surfaceNet.vertices[i0 + 2],
-            );
-
-            actr_log(`${v0}`);
-            actr_log(`${v1}`);
-            actr_log(`${v2}`);
-
-            //const leaf = new ActrOctreeLeaf()
-        }
+        this.branch[index] = new ActrOctree(false, new ActrPoint3<i64>(x, y, z), size, this, this.scene);
     }
 
     public insert(newLeaf: ActrOctreeLeaf): void {

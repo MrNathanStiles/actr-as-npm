@@ -1,5 +1,4 @@
-import { DTOF } from "..";
-import { ActrSize3F } from "./size";
+import { ActrPoint3 } from "./point";
 import { SurfaceNet } from "./surface-net";
 import { cube_edges, edge_table } from "./surface-nets";
 
@@ -28,13 +27,13 @@ export class SurfaceNetData {
             : new StaticArray<i32>(4096);
         
         let pushCount: i32 = 0;
-        let minx: f64 = f64.MAX_SAFE_INTEGER;
-        let miny: f64 = f64.MAX_SAFE_INTEGER;
-        let minz: f64 = f64.MAX_SAFE_INTEGER;
+        let minx: f32 = f32.MAX_SAFE_INTEGER;
+        let miny: f32 = f32.MAX_SAFE_INTEGER;
+        let minz: f32 = f32.MAX_SAFE_INTEGER;
         
-        let maxx: f64 = f64.MIN_SAFE_INTEGER;
-        let maxy: f64 = f64.MIN_SAFE_INTEGER;
-        let maxz: f64 = f64.MIN_SAFE_INTEGER;
+        let maxx: f32 = f32.MIN_SAFE_INTEGER;
+        let maxy: f32 = f32.MIN_SAFE_INTEGER;
+        let maxz: f32 = f32.MIN_SAFE_INTEGER;
         
         // March over the voxel grid
         for (x[2] = 0; x[2] < dims[2] - 1; ++x[2], n += dims[0], buf_no ^= 1, R[2] = -R[2]) {
@@ -116,13 +115,13 @@ export class SurfaceNetData {
                     //Add vertex to buffer, store pointer to vertex index in buffer
                     buffer[m] = pushCount++;
 
-                    minx = Math.min(v[0], minx);
-                    miny = Math.min(v[1], miny);
-                    minz = Math.min(v[2], minz);
+                    minx = Mathf.min(v[0], minx);
+                    miny = Mathf.min(v[1], miny);
+                    minz = Mathf.min(v[2], minz);
                     
-                    maxx = Math.max(v[0], maxx);
-                    maxy = Math.max(v[1], maxy);
-                    maxz = Math.max(v[2], maxz);
+                    maxx = Mathf.max(v[0], maxx);
+                    maxy = Mathf.max(v[1], maxy);
+                    maxz = Mathf.max(v[2], maxz);
                     
                     vertices.push(v[0]);
                     vertices.push(v[1]);
@@ -168,18 +167,18 @@ export class SurfaceNetData {
                 }
         }
 
-        const size = new ActrSize3F(DTOF(maxx - minx), DTOF(maxy - miny), DTOF(maxz - minz));
-        const fx: f32 = DTOF(minx + size.w / 2);
-        const fy: f32 = DTOF(miny + size.h / 2);
-        const fz: f32 = DTOF(minz + size.d / 2);
+        const size = new ActrPoint3<f32>(maxx - minx, maxy - miny, maxz - minz);
+        const fx: f32 = minx + size.x / 2 as f32;
+        const fy: f32 = miny + size.y / 2 as f32;
+        const fz: f32 = minz + size.z / 2 as f32;
         for (let i = 0; i < vertices.length; i += 3) {
             vertices[i] -= fx;
             vertices[i + 1] -= fy;
             vertices[i + 2] -= fz;
 
-            //vertices[i] -= mx;
-            //vertices[i + 1] -= my;
-            //vertices[i + 2] -= mz;
+            // vertices[i] -= mx;
+            // vertices[i + 1] -= my;
+            // vertices[i + 2] -= mz;
         }
         // All done!  Return the result
         return new SurfaceNet(StaticArray.fromArray(vertices), StaticArray.fromArray(faces), size.fill());
