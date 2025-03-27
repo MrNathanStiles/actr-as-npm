@@ -94,7 +94,7 @@ export class ActrUIControl {
         const hovered = this.isHovered;
         this.drawBackground(position, this.isFocused, hovered);
     }
-    protected drawBackground(position: ActrPoint2I, focused: bool, hovered: bool): void {
+    protected drawBackground(position: ActrPoint2L, focused: bool, hovered: bool): void {
 
         if (focused) actr_canvas2d_fill_style_int(this.backgroundColorFocused);
         else if (hovered) actr_canvas2d_fill_style_int(this.backgroundColorHovered);
@@ -105,7 +105,7 @@ export class ActrUIControl {
         actr_canvas2d_fill_rect((f32)(position.x), (f32)(position.y), (f32)(leaf.bounds.size.w), (f32)(leaf.bounds.size.h));
     }
 
-    protected drawBorder(position: ActrPoint2I, focused: bool, hovered: bool): void {
+    protected drawBorder(position: ActrPoint2L, focused: bool, hovered: bool): void {
 
         if (focused) actr_canvas2d_stroke_style_int(this.borderColorFocused);
         else if (hovered) actr_canvas2d_stroke_style_int(this.borderColorHovered);
