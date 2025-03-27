@@ -1,5 +1,5 @@
 import { actr_canvas2d_fill_rect, actr_canvas2d_fill_style_int, actr_canvas2d_stroke_rect, actr_canvas2d_stroke_style_int } from "./canvas";
-import { ActrPoint2I } from "./point";
+import { ActrPoint2I, ActrPoint2L } from "./point";
 import { ActrQuadTreeLeaf } from "./quadtree";
 import { ActrUIControlContainer } from "./ui-control-container";
 import { actr_pack_bytes, actr_unpack_bytes, ActrUIState } from "./ui-state";
@@ -38,8 +38,8 @@ export class ActrUIControl {
         return this.uiState.isFocused(this);
     }
 
-    public get position(): ActrPoint2I {
-        const result = new ActrPoint2I(
+    public get position(): ActrPoint2L {
+        const result = new ActrPoint2L(
             this.leaf!.bounds.point.x,
             this.leaf!.bounds.point.y
         );

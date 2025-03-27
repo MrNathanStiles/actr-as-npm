@@ -52,6 +52,7 @@ export class Cube {
         this.scene.remove(this.mesh);
         this.scene = null;
     }
+    
     public addToScene(scene: Scene): void {
         if (this.disposed) return;
         if (this.scene) return;
