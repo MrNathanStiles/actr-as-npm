@@ -8,6 +8,10 @@ export declare function _actr_three_init(buffer: StaticArray<f32>, length: i32):
 export declare function actr_three_render(): void;
 
 // @ts-ignore
+@external("env", "actr_three_id")
+export declare function actr_three_id(actr_id: i32): void;
+
+// @ts-ignore
 @external("env", "actr_three_raycast")
 export declare function actr_three_raycast(result: i32, target: i32, origin_x: f32, origin_y: f32, origin_z: f32, direction_x: f32, direction_y: f32, direction_z: f32): void;
 
