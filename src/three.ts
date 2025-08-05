@@ -9,7 +9,7 @@ export declare function actr_three_render(): void;
 
 // @ts-ignore
 @external("env", "actr_three_id")
-export declare function actr_three_id(actr_id: i32): void;
+export declare function actr_three_id(actr_id: i32): i32;
 
 // @ts-ignore
 @external("env", "actr_three_raycast")
